@@ -1,22 +1,26 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { loginUser } from '../services/authService'
+import { registerUser } from '../services/authService'
 
-function Login() {
+function Register() {
     const navigate = useNavigate()
     const [username, setUsername] = useState('')
+    const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
+    const [success, setSuccess] = useState('')
 
     const handleSubmit = async (event) => {
         event.preventDefault()
         setError('')
+        setSuccess('')
 
         try {
-            const { token, user } = await loginUser({ username, password })
-            localStorage.setItem('token', token)
-            localStorage.setItem('user', JSON.stringify(user))
-            navigate('/')
+            await registerUser({ username, email, password })
+            setSuccess('Rekisteröityminen onnistui! Voit nyt kirjautua sisään.')
+            setUsername('')
+            setEmail('')
+            setPassword('')
         } catch (err) {
             setError(err.message)
         }
@@ -24,7 +28,7 @@ function Login() {
 
     return (
         <div>
-            <h1>Login Page</h1>
+            <h1>Register</h1>
             <form onSubmit={handleSubmit}>
                 <label htmlFor="username">Username:</label>
                 <input
@@ -33,6 +37,16 @@ function Login() {
                     name="username"
                     value={username}
                     onChange={(event) => setUsername(event.target.value)}
+                    required
+                />
+                <br />
+                <label htmlFor="email">Email:</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
                     required
                 />
                 <br />
@@ -46,9 +60,10 @@ function Login() {
                     required
                 />
                 <br />
-                <button type="submit">Login</button>
+                <button type="submit">Register</button>
             </form>
             {error && <p style={{ color: 'red' }}>{error}</p>}
+            {success && <p style={{ color: 'green' }}>{success}</p>}
             <button type="button" onClick={() => navigate('/')}>
                 Etusivu
             </button>
@@ -56,4 +71,4 @@ function Login() {
     );
 }
 
-export default Login;
+export default Register;
