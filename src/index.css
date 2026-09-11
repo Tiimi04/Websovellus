@@ -12,10 +12,10 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+/*tämä on napin muokkaus */
 a {
   font-weight: 500;
-  color: #646cff;
+  color: #2ee700;
   text-decoration: inherit;
 }
 a:hover {
@@ -47,7 +47,7 @@ button {
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: #ee0d51;
 }
 button:focus,
 button:focus-visible {
@@ -60,7 +60,7 @@ button:focus-visible {
     background-color: #ffffff;
   }
   a:hover {
-    color: #747bff;
+    color: #05ee05;
   }
   button {
     background-color: #f9f9f9;
