@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import './App.css'
+import {Routes, Route, Link} from "react-router-dom"
+import NowPlaying from './pages/NowPlaying'
+
 
 function App() {
   const [data, setData] = useState([])
@@ -25,34 +28,54 @@ function App() {
     fetchData()
   }, [])
 
-  return (
-    <>
-      <h1>Docker Sample</h1>
-      <div className="card">
-        {loading && <p>Loading...</p>}
-        
-        {data && (
-          <div style={{ marginTop: '20px', padding: '10px', background: '#f0f0f0' }}>
-            <h3>Data from Backend:</h3>
-            <ul style={{ textAlign: 'left', margin: '10px 0' }}>
-              { data.map((item) => (
-                <li key={item.id} style={{ marginBottom: '10px' }}>
-                  {`ID: ${item.id} - ${item.description}`}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-        
-        {error && (
-          <div style={{ marginTop: '20px', padding: '10px', background: '#ffebee', color: 'red' }}>
-            <h3>Error:</h3>
-            <p>{error}</p>
-          </div>
-        )}
-      </div>
-    </>
-  )
+return (
+    <Routes>
+
+      <Route
+        path="/"
+        element={
+          <>
+            <h1>Docker Sample</h1>
+            <nav>
+              <Link to="/now-playing">Now Playing</Link>
+            </nav>
+
+
+            <div className="card">
+              {loading && <p>Loading...</p>}
+
+              {data && (
+                <div style={{ marginTop: '20px', padding: '10px', background: '#f0f0f0' }}>
+                  <h3>Data from Backend:</h3>
+
+                  <ul style={{ textAlign: 'left', margin: '10px 0' }}>
+                    {data.map((item) => (
+                      <li key={item.id} style={{ marginBottom: '10px' }}>
+                        {`ID: ${item.id} - ${item.description}`}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {error && (
+                <div style={{ marginTop: '20px', padding: '10px', background: '#ffebee', color: 'red' }}>
+                  <h3>Error:</h3>
+                  <p>{error}</p>
+                </div>
+              )}
+            </div>
+          </>
+        }
+      />
+
+      <Route
+        path="/now-playing"
+        element={<NowPlaying />}
+      />
+
+    </Routes>
+)
 }
 
 export default App
