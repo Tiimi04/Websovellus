@@ -10,29 +10,37 @@ const movies = [
     {
         id: 1,
         title: "Jaakon seikkailu",
+        genre: "Seikkailu",
         year: 2000
     },
     {
         id: 2,
         title: "Testing testing",
+        genre: "Drama",
         year: 2044
     },
     {
         id: 3,
         title: "abc aapinen",
+        genre: "Kauhu",
         year: 2005
     },
     {
         id: 4,
         title: "Joumaan",
+        genre: "Drama",
         year: 2020
     },
 
     ];
 
-    const filteredMovies = search.length >= 2 ? movies.filter((movie) =>
-        movie.title.toLowerCase().includes(search.toLowerCase())
-    ) : [];
+    const filteredMovies = search.length >= 2 
+        ? movies.filter((movie) =>
+        movie.title.toLowerCase().includes(search.toLowerCase()) ||
+        movie.year.toString().includes(search) ||
+        movie.genre.toLowerCase().includes(search.toLowerCase())
+    ) 
+    : [];
 
     return (
         <div className="NowPlayingPage">
@@ -47,7 +55,7 @@ const movies = [
 
             <input
                 type="text"
-                placeholder="Hae elokuvaa... Anna vähintään 2 merkkiä"
+                placeholder="Hae nimellä, genrellä tai vuodella (min 2 merkkiä)"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 style={{width: '300px'}}
