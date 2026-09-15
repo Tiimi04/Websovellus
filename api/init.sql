@@ -1,4 +1,5 @@
--- Luodaan taulut -- 
+-- Database is automatically created from POSTGRES_DB environment variable
+-- No need to create database manually since PostgreSQL container handles this
 DROP TABLE IF EXISTS group_movies;
 DROP TABLE IF EXISTS group_members;
 DROP TABLE IF EXISTS join_requests;
@@ -7,6 +8,17 @@ DROP TABLE IF EXISTS favourite_list_movies;
 DROP TABLE IF EXISTS favourite_list;
 DROP TABLE IF EXISTS groups;
 DROP TABLE IF EXISTS movies;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS test;
+
+CREATE TABLE test (
+    id SERIAL PRIMARY KEY,
+    description TEXT
+);
+
+INSERT INTO test (description) VALUES ('bar'), ('baz'), ('qux');
+
+-- Users table for registration / login (see api/db.sql for the full schema)
 DROP TABLE IF EXISTS users;
 
 
