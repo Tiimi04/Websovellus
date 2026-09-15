@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { registerUser } from '../services/authService'
+import { registerUser, deleteAccount } from '../services/authService'
 
 function Register() {
     const navigate = useNavigate()
@@ -11,7 +11,6 @@ function Register() {
     const [success, setSuccess] = useState('')
 
     const [deleteMode, setDeleteMode] = useState(false)
-    const [deleteEmail, setDeleteEmail] = useState('')
     const [deleteUsername, setDeleteUsername] = useState('')
     const [deletePassword, setDeletePassword] = useState('')
     const [deleteError, setDeleteError] = useState('')
@@ -38,7 +37,6 @@ function Register() {
         setDeleteError('')
         setDeleteSuccess('')
         setDeleteUsername('')
-        setDeleteEmail('')
         setDeletePassword('')
     }
 
@@ -48,10 +46,9 @@ function Register() {
         setDeleteSuccess('')
 
         try {
-            await deleteAccount({ username: deleteUsername, email: deleteEmail, password: deletePassword })
+            await deleteAccount({ username: deleteUsername, password: deletePassword })
             setDeleteSuccess('Käyttäjätili poistettu onnistuneesti.')
             setDeleteUsername('')
-            setDeleteEmail('')
             setDeletePassword('')
             setDeleteMode(false)
         } catch (err) {
@@ -118,19 +115,6 @@ function Register() {
                         id="deleteUsername"
                         name="deleteUsername"
                         value={deleteUsername}
-                        onChange={(event) => setDeleteUsername(event.target.value)}
-                        required
-                    />
-                    <br />
-                    <label htmlFor="deleteEmail">Email:</label>
-                    <input
-                        type="email"
-                        id="deleteEmail"
-                        name="deleteEmail"
-                        value={deleteEmail}
-                        onChange={(event) => setDeleteEmail(event.target.value)}
-                        required
-                    />
                         onChange={(event) => setDeleteUsername(event.target.value)}
                         required
                     />
