@@ -21,6 +21,7 @@ INSERT INTO test (description) VALUES ('bar'), ('baz'), ('qux');
 -- Users table for registration / login (see api/db.sql for the full schema)
 DROP TABLE IF EXISTS users;
 
+
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
   username VARCHAR(45) NOT NULL UNIQUE,

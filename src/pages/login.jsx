@@ -16,13 +16,15 @@ function Login() {
             const { token, user } = await loginUser({ username, password })
             localStorage.setItem('token', token)
             localStorage.setItem('user', JSON.stringify(user))
-            navigate('/')
+            navigate('/FrontPage')
         } catch (err) {
             setError(err.message)
         }
     }
 
     return (
+
+        
         <div>
             <h1>Login Page</h1>
             <form onSubmit={handleSubmit}>
