@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import { findByUsername, findByEmail, createUser } from '../models/User.js'
+import { findByUsername, findByEmail, createUser, deleteUserById } from '../models/User.js'
 
 const JWT_SECRET = process.env.JWT_SECRET
 const SALT_ROUNDS = 10
@@ -77,7 +77,40 @@ const login = async (req, res, next) => {
   }
 }
 
+const deleteAccount = async (req, res, next) => {
+  try {
+    const { username, password } = req.body
+
+    if (!username || !password) {
+      const error = new Error('Username and password are required')
+      error.status = 400
+      throw error
+    }
+
+    const user = await findByUsername(username)
+    if (!user) {
+      const error = new Error('Invalid username or password')
+      error.status = 401
+      throw error
+    }
+
+    const passwordMatches = await bcrypt.compare(password, user.password_hash)
+    if (!passwordMatches) {
+      const error = new Error('Invalid username or password')
+      error.status = 401
+      throw error
+    }
+
+    await deleteUserById(user.id)
+
+    res.status(200).json({ message: 'Käyttäjätili poistettu onnistuneesti' })
+  } catch (error) {
+    next(error)
+  }
+}
+
 export {
   register,
-  login
+  login,
+  deleteAccount
 }
