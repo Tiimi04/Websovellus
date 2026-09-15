@@ -12,6 +12,10 @@ function FrontPage() {
 <button type="button" onClick={() => navigate('/NowPlaying')}>
     Nyt elokuvissa ja elokuvien haku
 </button>
+
+<button type="button" onClick={() => navigate('/')}>
+    Kirjaudu ulos
+</button>
 </main>
     );
 
