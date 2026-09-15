@@ -27,4 +27,13 @@ const loginUser = async ({ username, password }) => {
   return parseResponse(response)
 }
 
-export { registerUser, loginUser }
+const deleteAccount = async ({ username, password }) => {
+  const response = await fetch(`${API_URL}/api/account`, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, password })
+  })
+  return parseResponse(response)
+}
+
+export { registerUser, loginUser, deleteAccount }

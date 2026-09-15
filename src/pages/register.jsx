@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { registerUser } from '../services/authService'
+import { registerUser, deleteAccount } from '../services/authService'
 
 function Register() {
     const navigate = useNavigate()
@@ -9,6 +9,12 @@ function Register() {
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
     const [success, setSuccess] = useState('')
+
+    const [deleteMode, setDeleteMode] = useState(false)
+    const [deleteUsername, setDeleteUsername] = useState('')
+    const [deletePassword, setDeletePassword] = useState('')
+    const [deleteError, setDeleteError] = useState('')
+    const [deleteSuccess, setDeleteSuccess] = useState('')
 
     const handleSubmit = async (event) => {
         event.preventDefault()
@@ -23,6 +29,30 @@ function Register() {
             setPassword('')
         } catch (err) {
             setError(err.message)
+        }
+    }
+
+    const handleDeleteModeChange = (event) => {
+        setDeleteMode(event.target.checked)
+        setDeleteError('')
+        setDeleteSuccess('')
+        setDeleteUsername('')
+        setDeletePassword('')
+    }
+
+    const handleDeleteSubmit = async (event) => {
+        event.preventDefault()
+        setDeleteError('')
+        setDeleteSuccess('')
+
+        try {
+            await deleteAccount({ username: deleteUsername, password: deletePassword })
+            setDeleteSuccess('Käyttäjätili poistettu onnistuneesti.')
+            setDeleteUsername('')
+            setDeletePassword('')
+            setDeleteMode(false)
+        } catch (err) {
+            setDeleteError(err.message)
         }
     }
 
@@ -64,6 +94,47 @@ function Register() {
             </form>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             {success && <p style={{ color: 'green' }}>{success}</p>}
+
+            <hr />
+
+            <label htmlFor="deleteMode">
+                <input
+                    type="checkbox"
+                    id="deleteMode"
+                    checked={deleteMode}
+                    onChange={handleDeleteModeChange}
+                />
+                Poista käyttäjätili
+            </label>
+
+            {deleteMode && (
+                <form onSubmit={handleDeleteSubmit}>
+                    <label htmlFor="deleteUsername">Username:</label>
+                    <input
+                        type="text"
+                        id="deleteUsername"
+                        name="deleteUsername"
+                        value={deleteUsername}
+                        onChange={(event) => setDeleteUsername(event.target.value)}
+                        required
+                    />
+                    <br />
+                    <label htmlFor="deletePassword">Password:</label>
+                    <input
+                        type="password"
+                        id="deletePassword"
+                        name="deletePassword"
+                        value={deletePassword}
+                        onChange={(event) => setDeletePassword(event.target.value)}
+                        required
+                    />
+                    <br />
+                    <button type="submit">Poista tili</button>
+                </form>
+            )}
+            {deleteError && <p style={{ color: 'red' }}>{deleteError}</p>}
+            {deleteSuccess && <p style={{ color: 'green' }}>{deleteSuccess}</p>}
+
             <button type="button" onClick={() => navigate('/')}>
                 Etusivu
             </button>
