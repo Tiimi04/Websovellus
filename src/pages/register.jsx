@@ -10,8 +10,6 @@ function Register() {
     const [error, setError] = useState('')
     const [success, setSuccess] = useState('')
 
-<<<<<<< Updated upstream
-=======
     const [deleteMode, setDeleteMode] = useState(false)
     const [deleteEmail, setDeleteEmail] = useState('')
     const [deleteUsername, setDeleteUsername] = useState('')
@@ -19,7 +17,6 @@ function Register() {
     const [deleteError, setDeleteError] = useState('')
     const [deleteSuccess, setDeleteSuccess] = useState('')
 
->>>>>>> Stashed changes
     const handleSubmit = async (event) => {
         event.preventDefault()
         setError('')
@@ -36,8 +33,6 @@ function Register() {
         }
     }
 
-<<<<<<< Updated upstream
-=======
     const handleDeleteModeChange = (event) => {
         setDeleteMode(event.target.checked)
         setDeleteError('')
@@ -64,7 +59,6 @@ function Register() {
         }
     }
 
->>>>>>> Stashed changes
     return (
         <div>
             <h1>Register</h1>
@@ -103,8 +97,6 @@ function Register() {
             </form>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             {success && <p style={{ color: 'green' }}>{success}</p>}
-<<<<<<< Updated upstream
-=======
 
             <hr />
 
@@ -159,7 +151,6 @@ function Register() {
             {deleteError && <p style={{ color: 'red' }}>{deleteError}</p>}
             {deleteSuccess && <p style={{ color: 'green' }}>{deleteSuccess}</p>}
 
->>>>>>> Stashed changes
             <button type="button" onClick={() => navigate('/')}>
                 Etusivu
             </button>
