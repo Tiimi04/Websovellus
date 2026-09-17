@@ -27,7 +27,7 @@ CREATE TABLE users (
   username VARCHAR(45) NOT NULL UNIQUE,
   email VARCHAR(45) NOT NULL UNIQUE,
   password_hash VARCHAR(250) NOT NULL,
-  profile_image VARCHAR(45) NULL
+  profile_image VARCHAR(255) NULL
 );
 
 CREATE TABLE groups (

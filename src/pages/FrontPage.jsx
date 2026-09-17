@@ -13,6 +13,10 @@ function FrontPage() {
     Nyt elokuvissa ja elokuvien haku
 </button>
 
+<button type="button" onClick={() => navigate('/profile')}>
+    Profiili
+</button>
+
 <button type="button" onClick={() => navigate('/')}>
     Kirjaudu ulos
 </button>

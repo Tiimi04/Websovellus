@@ -28,9 +28,20 @@ const deleteUserById = async (id) => {
   return result.rows[0]
 }
 
+const updateProfileImage = async (id, profileImagePath) => {
+  const result = await pool.query(
+    `UPDATE users SET profile_image = $1
+     WHERE id = $2
+     RETURNING id, username, email, profile_image`,
+    [profileImagePath, id]
+  )
+  return result.rows[0]
+}
+
 export {
   findByUsername,
   findByEmail,
   createUser,
-  deleteUserById
+  deleteUserById,
+  updateProfileImage
 }
