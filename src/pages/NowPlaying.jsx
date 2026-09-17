@@ -7,6 +7,7 @@ function NowPlaying() {
     const [search, setSearch] = useState('')
     const navigate = useNavigate()
     const [movies, setMovies] = useState([])
+    const [searchResults, setSearchResults] = useState([])
 
     useEffect(() => {
     fetch('/api/movies')
@@ -28,12 +29,17 @@ function NowPlaying() {
         })
 }, [])
 
-    const filteredMovies = search.length >= 2
-        ? movies.filter((movie) =>
-            movie.title?.toLowerCase().includes(search.toLowerCase()) ||
-            movie.release_date?.includes(search)
-        )
-        : []
+    useEffect(() => {
+        if (search.length < 2) {
+            setSearchResults([])
+        } else {
+            fetch(`/api/movies/search?query=${encodeURIComponent(search)}`)
+                .then(response => response.json())
+                .then(data => setSearchResults(data))
+                .catch(error => console.error('SEARCH ERROR:', error))
+        }
+    }, [search])
+
 
     return (
         <div className="NowPlayingPage">
@@ -49,14 +55,16 @@ function NowPlaying() {
                     onChange={(e) => setSearch(e.target.value)}
                     style={{ width: '300px' }}
                 />
-
-                <MovieList movies={filteredMovies} />
+                <div className="SearchResults">
+                    <MovieList movies={searchResults} />
+                </div>
             </div>
 
             <div className="NowPlaying">
                 <h1>Nyt elokuvissa</h1>
-
+            <div className="NowPlayingList">
                 <MovieList movies={movies} />
+            </div>
             </div>
 
         </div>
