@@ -12,11 +12,12 @@ const Navbar = () => {
           </button>
           <div className="dropdown-content">
             <a href="/FrontPage">Etusivu</a>
-            <a href="/NowPlaying">Nyt Elokuvissa</a>
-            <a>Profiili</a>
+            <a>Nyt Elokuvissa</a>
+            <a href="/profile">Profiili</a>
             <a>Parhaat elokuvat</a>
             <a>Selaa genreittäin</a>
             <a>Suosituimmat elokuvat</a>
+            <a href="/">Kirjaudu ulos</a>
           </div>
         </div>
       </div>
