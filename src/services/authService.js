@@ -36,4 +36,27 @@ const deleteAccount = async ({ username, password }) => {
   return parseResponse(response)
 }
 
-export { registerUser, loginUser, deleteAccount }
+const selectProfileImage = async (profileImage) => {
+  const token = localStorage.getItem('token')
+  const response = await fetch(`${API_URL}/api/profile-image`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify({ profileImage })
+  })
+  return parseResponse(response)
+}
+
+const getProfileImageUrl = (profileImagePath) => {
+  if (!profileImagePath) {
+    return null
+  }
+  if (profileImagePath.startsWith('/profile-avatars/')) {
+    return profileImagePath
+  }
+  return profileImagePath.startsWith('/') ? `${API_URL}${profileImagePath}` : `${API_URL}/${profileImagePath}`
+}
+
+export { registerUser, loginUser, deleteAccount, selectProfileImage, getProfileImageUrl }
