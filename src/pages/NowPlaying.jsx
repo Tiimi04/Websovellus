@@ -1,6 +1,7 @@
 import MovieList from "../components/MovieList"
 import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from "react";
+import './NowPlaying.css'
 
 function NowPlaying() {
     const [search, setSearch] = useState('')
@@ -37,14 +38,6 @@ function NowPlaying() {
     return (
         <div className="NowPlayingPage">
 
-            <div className="BackButton">
-                <button
-                    type="button"
-                    onClick={() => navigate('/FrontPage')}
-                >
-                    Etusivu
-                </button>
-            </div>
 
             <div className="Search">
                 <h1>Elokuvien haku</h1>
