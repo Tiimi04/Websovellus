@@ -4,6 +4,7 @@ import './navbar.css';
 const Navbar = () => {
     return (      
       <div className="navbar">
+        <a href="/FrontPage">Elokuvasivun nimi</a>
         <div className="dropdown">
           <button className="dropbtn">
           Menu
