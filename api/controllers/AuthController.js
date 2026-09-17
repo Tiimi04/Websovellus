@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import { findByUsername, findByEmail, createUser, deleteUserById } from '../models/User.js'
+import { findByUsername, findByEmail, createUser, deleteUserById, updateProfileImage } from '../models/User.js'
 
 const JWT_SECRET = process.env.JWT_SECRET
 const SALT_ROUNDS = 10
@@ -70,7 +70,7 @@ const login = async (req, res, next) => {
 
     res.status(200).json({
       token,
-      user: { id: user.id, username: user.username, email: user.email }
+      user: { id: user.id, username: user.username, email: user.email, profile_image: user.profile_image }
     })
   } catch (error) {
     next(error)
@@ -109,8 +109,33 @@ const deleteAccount = async (req, res, next) => {
   }
 }
 
+const selectProfileImage = async (req, res, next) => {
+  try {
+    const allowedProfileImages = new Set([
+      '/profile-avatars/1.png',
+      '/profile-avatars/2.png',
+      '/profile-avatars/3.png',
+      '/profile-avatars/4.png',
+    ])
+    const { profileImage } = req.body
+
+    if (!allowedProfileImages.has(profileImage)) {
+      const error = new Error('Virheellinen profiilikuva')
+      error.status = 400
+      throw error
+    }
+
+    const user = await updateProfileImage(req.user.id, profileImage)
+
+    res.status(200).json({ user })
+  } catch (error) {
+    next(error)
+  }
+}
+
 export {
   register,
   login,
-  deleteAccount
+  deleteAccount,
+  selectProfileImage
 }
