@@ -8,10 +8,12 @@ import FrontPage from './pages/FrontPage'
 import Profile from './pages/Profile'
 
 
+import Navbar from './components/navbar.jsx'
 
 function App() {
   return (
     <>
+      <Navbar/>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
