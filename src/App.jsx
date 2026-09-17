@@ -5,10 +5,12 @@ import Login from './pages/login'
 import Register from './pages/register'
 import NowPlaying from './pages/NowPlaying'
 import FrontPage from './pages/FrontPage'
+import Navbar from './components/navbar.jsx'
 
 function App() {
   return (
     <>
+      <Navbar/>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
