@@ -44,7 +44,7 @@
   position: absolute;
   left: 20px;
   top: 20px;
-  
+
 }
 
 .BackButton button {
@@ -55,6 +55,7 @@
 
 .navbar {
   position: absolute;
-  right: 20px;
+  left: 50%;
+  transform: translateX(-50%);
   top: 20px;
 }
