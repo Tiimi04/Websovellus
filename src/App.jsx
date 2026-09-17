@@ -1,4 +1,4 @@
-import { Routes, Route, useNavigate } from 'react-router-dom'
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom'
 import './App.css'
 import Home from './pages/Home'
 import Login from './pages/login'
@@ -8,11 +8,14 @@ import FrontPage from './pages/FrontPage'
 import Navbar from './components/navbar.jsx'
 
 function App() {
+  const { pathname } = useLocation()
+  //  Sivut missä navbar piilossa
+  const navbarHiddenPaths = ['/login', '/register']
   return (
     <>
-      <Navbar/>
+      {!navbarHiddenPaths.includes(pathname) && <Navbar />}
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home />}/>  
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/NowPlaying" element={<NowPlaying />} />
