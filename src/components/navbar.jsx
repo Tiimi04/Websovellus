@@ -9,14 +9,14 @@ const Navbar = () => {
           <button className="dropbtn">
           Menu
           <i className="fa fa-caret-down"></i>
-          </button>
+          </button> 
           <div className="dropdown-content">
             <a href="/FrontPage">Etusivu</a>
             <a href="/NowPlaying">Nyt Elokuvissa</a>
-            <a>Profiili</a>
-            <a>Parhaat elokuvat</a>
-            <a>Selaa genreittäin</a>
-            <a>Suosituimmat elokuvat</a>
+            <a>placeholder</a>
+            <a>placeholder</a>
+            <a>placeholder</a>
+            <a>placeholder</a>
           </div>
         </div>
       </div>
