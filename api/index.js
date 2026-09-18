@@ -4,6 +4,7 @@ import cors from 'cors'
 import errorHandler from './middleware/errorHandler.js'
 import testRouter from './routes/testRouter.js'
 import authRouter from './routes/authRouter.js'
+import NowPlayingRouter from './routes/NowPlayingRouter.js'
 
 const port = process.env.PORT || 3000
 
@@ -15,7 +16,7 @@ app.use(express.urlencoded({ extended: false }))
 
 app.use('/', testRouter)
 app.use('/api', authRouter)
-
+app.use('/api/movies', NowPlayingRouter)
 // Health check endpoint for database connectivity
 app.get('/api/health', async (req, res) => {
   try {
