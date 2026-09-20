@@ -10,7 +10,7 @@ function FrontPage() {
 
 
 <main>
-<h1> Tervetuloa elokuvasivulle </h1>
+<h1>  </h1>
 
 <NowPlaying />
 

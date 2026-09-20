@@ -40,8 +40,10 @@ CREATE TABLE groups (
 CREATE TABLE movies (
   id SERIAL PRIMARY KEY,
   tmdb_id INT NOT NULL,
-  title VARCHAR(45) NOT NULL,
-  category_type VARCHAR(45) NOT NULL
+  title VARCHAR(255) NOT NULL,
+  category_type VARCHAR(45) NOT NULL,
+  poster_path VARCHAR(255) NULL,
+  release_date VARCHAR(20) NULL
 );
 
 CREATE TABLE favourite_list (

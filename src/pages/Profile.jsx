@@ -1,6 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getProfileImageUrl, selectProfileImage } from '../services/authService'
+import { getFavourites, removeFavourite } from '../services/favouriteService'
+import MovieList from '../components/MovieList'
 import './Profile.css'
 
 const PROFILE_AVATARS = [
@@ -25,6 +27,20 @@ function Profile() {
     const [isAvatarPickerOpen, setIsAvatarPickerOpen] = useState(false)
     const [savingAvatar, setSavingAvatar] = useState(false)
     const [error, setError] = useState('')
+    const [favourites, setFavourites] = useState([])
+    const [favouritesError, setFavouritesError] = useState('')
+
+    useEffect(() => {
+        getFavourites()
+            .then(setFavourites)
+            .catch((err) => setFavouritesError(err.message))
+    }, [])
+
+    const handleRemoveFavourite = (movie) => {
+        removeFavourite(movie.id)
+            .then(() => setFavourites((prev) => prev.filter((m) => m.id !== movie.id)))
+            .catch((err) => setFavouritesError(err.message))
+    }
 
     const handleAvatarSelect = async (avatar) => {
         setError('')
@@ -75,6 +91,16 @@ function Profile() {
                     {user.email && <span className="profile-email">{user.email}</span>}
                 </div>
             </div>
+
+            <section className="favourites-section">
+                <h2>Suosikkilistani</h2>
+                {favouritesError && <p style={{ color: 'red' }}>{favouritesError}</p>}
+                {favourites.length === 0 ? (
+                    <p>Et ole vielä lisännyt yhtään elokuvaa suosikkeihin.</p>
+                ) : (
+                    <MovieList movies={favourites} onRemoveFavourite={handleRemoveFavourite} />
+                )}
+            </section>
 
             {isAvatarPickerOpen && (
                 <section className="avatar-picker" aria-labelledby="avatar-picker-title">

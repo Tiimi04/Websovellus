@@ -14,6 +14,7 @@ function App() {
   const { pathname } = useLocation()
   //  Sivut missä navbar piilossa
   const navbarHiddenPaths = ['/login', '/register'/*, '/' */]
+  const showNavbar = !navbarHiddenPaths.includes(pathname)
   return (
     <>
       {!navbarHiddenPaths.includes(pathname) && <Navbar />}

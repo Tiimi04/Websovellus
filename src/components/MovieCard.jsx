@@ -20,7 +20,7 @@ const genres = {
     37: "Western"
 };
 
-function MovieCard({ movie }) {
+function MovieCard({ movie, onAddFavourite, onRemoveFavourite, isFavourite }) {
     return (
         <div>
             {movie.poster_path && (
@@ -32,7 +32,19 @@ function MovieCard({ movie }) {
             )}
             <h2>{movie.title}</h2>
             <p>Julkaisupäivä: {movie.release_date}</p>
-            <p>Genret: {movie.genre_ids.map(id => genres[id]).join(", ")}</p>
+            {movie.genre_ids && (
+                <p>Genret: {movie.genre_ids.map(id => genres[id]).join(", ")}</p>
+            )}
+            {onRemoveFavourite && (
+                <button type="button" onClick={() => onRemoveFavourite(movie)}>
+                    Poista suosikeista
+                </button>
+            )}
+            {onAddFavourite && !onRemoveFavourite && (
+                <button type="button" onClick={() => onAddFavourite(movie)} disabled={isFavourite}>
+                    {isFavourite ? 'Suosikeissa' : 'Lisää suosikkeihin'}
+                </button>
+            )}
         </div>
     );
 }

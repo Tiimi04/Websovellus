@@ -3,6 +3,19 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.page-content {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Tila navbarin (sivupalkin) verran, ettei sisältö mene sen alle */
+.page-content.with-sidebar {
+  margin-left: 220px;
+  width: calc(100% - 220px);
 }
 
 
