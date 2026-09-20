@@ -1,8 +1,16 @@
 .navbar {
-  display:flex;
-  justify-content: center;
-  background-color: inherit;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  background-color: #1a1a1a;
   font-family: Arial;
+  overflow-y: auto;
+  z-index: 100;
 }
 
 /* Title */
@@ -10,11 +18,10 @@
   /*border-style: solid;
   border-radius: 5px;
   border-width: 1px;*/
-  float: center;
-  font-size: 26px;
+  font-size: 22px;
   color: white;
   text-align: center;
-  padding: 10px 16px;
+  padding: 16px 8px;
   text-decoration: none;
 }
 
@@ -25,12 +32,13 @@
 
 .dropdown {
   position: relative;
-  width:fit-content;
+  width: 100%;
 }
 
 /* Menu nappi */
 .dropdown .dropbtn {
-  font-size: 26px;
+  width: 100%;
+  font-size: 22px;
   /*border-style: solid;
   border-radius: 5px;
   border-width: 1px;
@@ -55,9 +63,9 @@
   display: none;
   position: absolute;
   background-color: #1a1a1a;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 140%;
+  top: 0;
+  left: 100%;
+  width: 180px;
 }
 
 /* Linkit menussa */
