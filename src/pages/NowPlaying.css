@@ -16,13 +16,6 @@
   text-align: center;
 }
 
-.navbar {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 20px;
-}
-
 .NowPlayingList {
   max-height: 600px;
   overflow-y: auto;

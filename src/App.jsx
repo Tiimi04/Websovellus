@@ -14,17 +14,20 @@ function App() {
   const { pathname } = useLocation()
   //  Sivut missä navbar piilossa
   const navbarHiddenPaths = ['/login', '/register'/*, '/' */]
+  const showNavbar = !navbarHiddenPaths.includes(pathname)
   return (
     <>
-      {!navbarHiddenPaths.includes(pathname) && <Navbar />}
-      <Routes>
-        <Route path="/" element={<Home />}/>  
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/NowPlaying" element={<NowPlaying />} />
-        <Route path="/FrontPage" element={<FrontPage />} />
-        <Route path="/profile" element={<Profile />} />
-      </Routes>
+      {showNavbar && <Navbar />}
+      <div className={showNavbar ? 'page-content with-sidebar' : 'page-content'}>
+        <Routes>
+          <Route path="/" element={<Home />}/>  
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/NowPlaying" element={<NowPlaying />} />
+          <Route path="/FrontPage" element={<FrontPage />} />
+          <Route path="/profile" element={<Profile />} />
+        </Routes>
+      </div>
     </>
   )
 }

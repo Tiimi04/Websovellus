@@ -1,6 +1,7 @@
 import MovieList from "../components/MovieList"
 import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from "react";
+import { getFavourites, addFavourite } from "../services/favouriteService"
 import './NowPlaying.css'
 
 function NowPlaying() {
@@ -8,6 +9,22 @@ function NowPlaying() {
     const navigate = useNavigate()
     const [movies, setMovies] = useState([])
     const [searchResults, setSearchResults] = useState([])
+    const [favouriteTmdbIds, setFavouriteTmdbIds] = useState(new Set())
+    const isLoggedIn = Boolean(localStorage.getItem('token'))
+
+    useEffect(() => {
+        if (!isLoggedIn) return
+
+        getFavourites()
+            .then(favourites => setFavouriteTmdbIds(new Set(favourites.map(f => f.tmdb_id))))
+            .catch(error => console.error('FAVOURITES ERROR:', error))
+    }, [isLoggedIn])
+
+    const handleAddFavourite = (movie) => {
+        addFavourite(movie)
+            .then(() => setFavouriteTmdbIds(prev => new Set(prev).add(movie.id)))
+            .catch(error => console.error('ADD FAVOURITE ERROR:', error))
+    }
 
     useEffect(() => {
     fetch('/api/movies')
@@ -56,14 +73,22 @@ function NowPlaying() {
                     style={{ width: '300px' }}
                 />
                 <div className="SearchResults">
-                    <MovieList movies={searchResults} />
+                    <MovieList
+                        movies={searchResults}
+                        onAddFavourite={isLoggedIn ? handleAddFavourite : undefined}
+                        favouriteTmdbIds={favouriteTmdbIds}
+                    />
                 </div>
             </div>
 
             <div className="NowPlaying">
                 <h1>Nyt elokuvissa</h1>
             <div className="NowPlayingList">
-                <MovieList movies={movies} />
+                <MovieList
+                    movies={movies}
+                    onAddFavourite={isLoggedIn ? handleAddFavourite : undefined}
+                    favouriteTmdbIds={favouriteTmdbIds}
+                />
             </div>
             </div>
 
