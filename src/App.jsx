@@ -6,6 +6,7 @@ import Register from './pages/register'
 import NowPlaying from './pages/NowPlaying'
 import FrontPage from './pages/FrontPage'
 import Profile from './pages/Profile'
+import Groups from './pages/groups'
 
 
 import Navbar from './components/navbar.jsx'
@@ -24,6 +25,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/FrontPage" element={<FrontPage />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/groups" element={<Groups />} />
       </Routes>
     </>
   )
