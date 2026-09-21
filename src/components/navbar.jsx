@@ -10,9 +10,9 @@ const Navbar = () => {
           <div className="dropdown-content">
             <a href="/FrontPage">Etusivu</a>
             <a href="/profile">Profiili</a>
-            <a>Parhaat elokuvat</a>
+            <a href="login">Kirjaudu</a>
             <a href="/groups">Ryhmät</a>
-            <a>Suosituimmat elokuvat</a>
+            <a href="register">Rekisteröidy</a>
             <a href="/">Kirjaudu ulos</a>
           </div>
       </div>
