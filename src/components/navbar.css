@@ -1,63 +1,18 @@
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 220px;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  background-color: #1a1a1a;
-  font-family: Arial;
-  overflow-y: auto;
-  z-index: 100;
-}
-
-/* Title */
-.navbar a {
-  /*border-style: solid;
-  border-radius: 5px;
-  border-width: 1px;*/
-  font-size: 22px;
-  color: white;
-  text-align: center;
-  padding: 16px 8px;
-  text-decoration: none;
-}
-
-/* Title hover */
-.navbar a:hover {
-  background-color: #1a1a1a;
-}
-
 .dropdown {
-  position: relative;
-  width: 100%;
+  position: fixed;
+  top: 10px;
+  left: 10px;
 }
 
 /* Menu nappi */
 .dropdown .dropbtn {
-  width: 100%;
-  font-size: 22px;
-  /*border-style: solid;
-  border-radius: 5px;
-  border-width: 1px;
-  border-color: #1a1a1a;*/
   border: none;
   outline: none;
   color: white;
-  padding: 14px 16px;
   background-color: #1a1a1a;
   font-family: inherit;
   margin: 0;
 }
-
-/* Hover efektit */
-.navbar .dropdown:hover .dropbtn {
-  background-color: gray;
-  color: whitesmoke;
-}
-
 /* Dropdown content piilossa yleisesti */
 .dropdown-content {
   display: none;
@@ -88,4 +43,9 @@
 /* Paljasta menu on hover */
 .dropdown:hover .dropdown-content {
   display: block;
+}
+
+.dropdown .dropbtn img {
+  height: 40px;
+  width: 40px;
 }
