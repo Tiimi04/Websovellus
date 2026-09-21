@@ -3,22 +3,18 @@ import './navbar.css';
 
 const Navbar = () => {
     return (      
-      <div className="navbar">
-        <a href="/FrontPage">Elokuvasivun nimi</a>
-        <div className="dropdown">
+      <div className="dropdown">
           <button className="dropbtn">
-          Menu
-          <i></i>
+            <img src="../public/burger-menu/brgrmenu2.png"></img>
           </button> 
           <div className="dropdown-content">
             <a href="/FrontPage">Etusivu</a>
             <a href="/profile">Profiili</a>
             <a>Parhaat elokuvat</a>
-            <a>Selaa genreittäin</a>
+            <a href="/groups">Ryhmät</a>
             <a>Suosituimmat elokuvat</a>
             <a href="/">Kirjaudu ulos</a>
           </div>
-        </div>
       </div>
     )
 }
