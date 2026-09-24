@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from "react";
 import { getFavourites, addFavourite } from "../services/favouriteService"
 import './NowPlaying.css'
+import MoviePage from "./MoviePage";
 
 function NowPlaying() {
     const [search, setSearch] = useState('')

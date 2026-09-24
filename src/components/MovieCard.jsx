@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom';
+
 const genres = {
     28: "Toiminta",
     12: "Seikkailu",
@@ -21,12 +23,14 @@ const genres = {
 };
 
 function MovieCard({ movie, onAddFavourite, onRemoveFavourite, isFavourite }) {
+    const navigate = useNavigate();
     return (
         <div>
             {movie.poster_path && (
                 <img
                     src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                     alt={movie.title}
+                    onClick={() => navigate(`/movie/${movie.id}`)}
                     width="150"
                 />
             )}
