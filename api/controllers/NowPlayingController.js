@@ -1,3 +1,5 @@
+import { getAverageRatingsForMovies} from "../models/Review.js"
+
 const getNowPlaying = async (req, res, next) => {
   try {
     const response = await fetch(
@@ -9,8 +11,22 @@ const getNowPlaying = async (req, res, next) => {
     }
 
     const data = await response.json()
+    console.log("TMDB:", data.results.length)
+    const ratings = await getAverageRatingsForMovies(data.results.map(movie => movie.id)
+  )
+  console.log("RATINGS:", ratings)
+  const ratingsMap = new Map(
+    ratings.map(rating => [
+        String(rating.tmdb_id),
+        rating.average_rating
+    ])
+)
+const movies = data.results.map(movie => ({
+    ...movie,
+    average_rating: ratingsMap.get(String(movie.id)) ?? null
+}))
 
-    res.json(data.results)
+    res.json(movies)
   } catch (error) {
     next(error)
   }
@@ -33,8 +49,24 @@ const searchMovies = async (req, res, next) => {
         }
 
         const data = await response.json();
+        const ratings = await getAverageRatingsForMovies(
+    data.results.map(movie => movie.id)
+)
 
-        res.json(data.results);
+const ratingsMap = new Map(
+    ratings.map(rating => [
+        String(rating.tmdb_id),
+        rating.average_rating
+    ])
+)
+
+const movies = data.results.map(movie => ({
+    ...movie,
+    average_rating: ratingsMap.get(String(movie.id)) ?? null
+}))
+
+
+        res.json(movies);
     } catch (error) {
         next(error);
     }

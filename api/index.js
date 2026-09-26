@@ -8,6 +8,7 @@ import NowPlayingRouter from './routes/NowPlayingRouter.js'
 import favouriteRouter from './routes/favouriteRouter.js'
 import groupRouter from './routes/groupRouter.js'
 import MoviePageRouter from './routes/MoviePageRouter.js'
+import ReviewRouter from './routes/ReviewRouter.js'
 
 const port = process.env.PORT || 3000
 
@@ -23,6 +24,7 @@ app.use('/api/movies', NowPlayingRouter)
 app.use('/api/favourites', favouriteRouter)
 app.use('/api/groups', groupRouter)
 app.use('/api/movies', MoviePageRouter)
+app.use('/api/movies', ReviewRouter)
 // Health check endpoint for database connectivity
 app.get('/api/health', async (req, res) => {
   try {

@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from "react";
 import { getFavourites, addFavourite } from "../services/favouriteService"
 import './NowPlaying.css'
-import MoviePage from "./MoviePage";
 
 function NowPlaying() {
     const [search, setSearch] = useState('')
@@ -12,6 +11,7 @@ function NowPlaying() {
     const [searchResults, setSearchResults] = useState([])
     const [favouriteTmdbIds, setFavouriteTmdbIds] = useState(new Set())
     const isLoggedIn = Boolean(localStorage.getItem('token'))
+
 
     useEffect(() => {
         if (!isLoggedIn) return

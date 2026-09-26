@@ -1,3 +1,6 @@
+import { findOrCreateByTmdbId } from "../models/Movie.js"
+
+
 const getMovie = async (req, res, next) => {
     try {
         const { id } = req.params
@@ -12,6 +15,13 @@ const getMovie = async (req, res, next) => {
         }
 
         const data = await response.json()
+
+        await findOrCreateByTmdbId({
+            tmdbId: data.id,
+            title: data.title,
+            posterPath: data.poster_path,
+            releaseDate: data.release_date
+        })
 
         res.json(data)
     } catch (error) {

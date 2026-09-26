@@ -6,6 +6,7 @@ import FrontPage from './pages/FrontPage'
 import Profile from './pages/Profile'
 import Groups from './pages/groups'
 import MoviePage from './pages/MoviePage'
+import Login from './pages/login.jsx'
 
 
 
@@ -25,6 +26,8 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/groups" element={<Groups />} />
         <Route path="/movie/:id" element={<MoviePage />} />
+        <Route path="/login" element={<Login />} />
+         <Route path="/register" element={<Register />} />
       </Routes>
     </>
   )
