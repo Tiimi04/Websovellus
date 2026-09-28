@@ -1,0 +1,18 @@
+.groupInfo {
+    text-align: left;
+}
+
+.groupInfo img {
+    width: 2em;
+    height: 2em;
+}
+
+.managing {
+    position: absolute;
+    top: 10%;
+    right: 10%;
+}
+.managing #deleteBut img {
+    width: 2em;
+    height: 2em;
+}
