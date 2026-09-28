@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from 'react-router-dom'
 import { getGroups, createGroup, deleteGroup, getGroupMembers } from '../services/groupService'
 import './groups.css'
 
@@ -28,45 +29,45 @@ function Groups() {
         }
     }
 
-      const handleDelete = async (groupId) => {
+    const handleDelete = async (groupId) => {
         setError('')
         try {
-          await deleteGroup(groupId)
-          setGroups((currentGroups) => (
+            await deleteGroup(groupId)
+            setGroups((currentGroups) => (
             currentGroups.filter((group) => group.id !== groupId)
-          ))
+        ))
         } catch (err) {
-          setError(err.message)
+            setError(err.message)
         }
       }
 
-      const handleFetch = async (groupId) => {
+    const handleFetch = async (groupId) => {
         setError('')
         if (membersGroupId === groupId) {
-          setMembersGroupId(null)
-          return
+            setMembersGroupId(null)
+            return
         }
 
         setMembersGroupId(groupId)
 
         try {
-          const members = await getGroupMembers(groupId)
-          setMembersByGroup((currentMembers) => ({
-            ...currentMembers,
-            [groupId]: members
+            const members = await getGroupMembers(groupId)
+            setMembersByGroup((currentMembers) => ({
+              ...currentMembers,
+              [groupId]: members
           }))
         } catch (err) {
-          setError(err.message)
-          setMembersGroupId(null)
+            setError(err.message)
+            setMembersGroupId(null)
         }
       }
 
       const toggleVisibility = () => {
-        setIsVisible(!isVisible);
+          setIsVisible(!isVisible);
       }
 
     return (
-        <main className="groups-page">
+        <main>
           <div className="topBar">
             <h2>Ryhmät
               <button onClick={toggleVisibility} className="createBtn">
@@ -90,7 +91,7 @@ function Groups() {
           <ul>
             {groups.map((group) => (
               <li key={group.id}>
-                <strong>{group.name}</strong>
+                <strong><Link to={`/groups/${group.id}`}>{group.name}</Link></strong>
                 <div className="listItem">
                 <ul>
                   <li> Luotu {new Date(group.created).toLocaleDateString()}</li>
@@ -119,7 +120,7 @@ function Groups() {
                         {membersByGroup[group.id].map((member) => (
                           <li key={member.id}>
                             {member.profile_image ? (
-                              <img className="memberAvatar" src={member.profile_image} alt="" />
+                              <img className="memberAvatar" src={member.profile_image} />
                             ) : (
                               <span className="memberInitial">
                                 {member.username?.charAt(0).toUpperCase()}
