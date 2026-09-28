@@ -78,12 +78,20 @@ useEffect(() => {
         });
 
         if (!response.ok) {
-            throw new Error("Review submission failed");
+            throw new Error("Arvostelun lähetys epäonnistui");
         }
 
-        const newReview = await response.json();
+        await response.json()
 
-        setReviews([...reviews, newReview]);
+        const reviewsResponse = await fetch(`/api/movies/${id}/reviews`)
+        const reviewsData = await reviewsResponse.json()
+        setReviews(reviewsData)
+
+
+        const averageResponse = await fetch(`/api/movies/${id}/reviews/average`)
+        const averageData = await averageResponse.json()
+        setAverageRating(averageData.average_rating)
+
         setComment("");
         setRating(5);
 
@@ -119,7 +127,8 @@ useEffect(() => {
                     <div key={review.id}>
                         <p>{review.review_text}</p>
                         <p>Arvosana: {review.rating}</p>
-                        <p> Arvostelija: </p>
+                        <p> Arvostelija: {review.username} </p>
+                        <p>Arvosteltu: {new Date(review.created_at).toLocaleString('fi-FI')}</p>
                     </div>
 
 

@@ -2,10 +2,11 @@ import { pool } from './db.js'
 
 const getReviewsForMovie = async (movieId) => {
     const result = await pool.query(
-        `SELECT *
+        `SELECT reviews.*, users.username 
         FROM reviews
-        WHERE movie_id = $1
-        ORDER BY created_at DESC`,
+        JOIN users ON users.id = reviews.user_id
+        WHERE reviews.movie_id = $1
+        ORDER BY reviews.created_at DESC`,
         [movieId]
     )
     return result.rows
