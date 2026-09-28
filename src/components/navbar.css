@@ -2,15 +2,14 @@
   position: fixed;
   top: 10px;
   left: 10px;
+  z-index: 1000;
 }
 
 /* Menu nappi */
 .dropdown .dropbtn {
   border: none;
   outline: none;
-  color: white;
   background-color: #1a1a1a;
-  font-family: inherit;
   margin: 0;
 }
 /* Dropdown content piilossa yleisesti */
@@ -26,7 +25,7 @@
 /* Linkit menussa */
 .dropdown-content a {
   font-size: 16px;
-  float: none;
+  float:none;
   color: white;
   padding: 10px;
   text-decoration: none;
@@ -39,7 +38,6 @@
   background-color: #ddd;
   color: gray;
 }
-
 /* Paljasta menu on hover */
 .dropdown:hover .dropdown-content {
   display: block;

@@ -1,0 +1,80 @@
+.topBar {
+    position: relative;
+    top: 10%;
+    width: auto;
+    height: auto;
+}
+
+.topBar .createBtn {
+    position: relative;
+    top: 1%;
+    padding: 5px 5px 1px 4px;
+    margin: 1rem;
+}
+
+.topBar .createBtn img {
+    position: relative;
+    width: 2rem;
+    height: 2rem;
+}
+
+.deleteBtn {
+    background: #1a1a1a url('/public/burger-menu/deleteicon.png');
+    width: 5rem;
+    height: 3rem;
+    margin: auto;
+    padding: auto;
+}
+.deleteBtn img {
+    width: 2rem;
+    height: 2rem;
+}
+
+.topBar .nameInput {
+    position: relative;
+    font-size: 16px;
+    margin: 1rem;
+    padding: 0;
+}
+
+ul {
+    width: auto;
+    position: relative;
+    list-style-type: none;
+    margin: 1rem;
+    padding: 0px;
+}
+
+.groupMap > ul > li {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.groupMap .listItem li {
+    display: list-item;
+    float: none;
+}
+
+.membersPanel {
+    padding: 0px;
+    margin: 0px;
+}
+
+.memberAvatar {
+    width: 2rem;
+    height: 2rem;
+    flex: 0 0 2rem;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.memberInitial {
+    font-size: 32px;
+    padding: 5px;
+    margin: 5px;
+}
+
+.membersInfo {
+    padding: 0px 1em 0px 1em;
+    margin: 0px;
+}

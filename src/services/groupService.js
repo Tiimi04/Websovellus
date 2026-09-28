@@ -32,6 +32,13 @@ const getGroups = async () => {
     return parseResponse(response)
 }
 
+const getGroupMembers = async (groupId) => {
+    const response = await fetch(`${API_URL}/api/groups/${groupId}/members`, {
+        headers: authHeaders()
+    })
+    return parseResponse(response)
+}
+
 const deleteGroup = async (groupId) => {
     const response = await fetch(`${API_URL}/api/groups/${groupId}`, {
         method: 'DELETE',
@@ -40,4 +47,4 @@ const deleteGroup = async (groupId) => {
     return parseResponse(response)
 }
 
-export { getGroups, createGroup, deleteGroup}
+export { getGroups, getGroupMembers, createGroup, deleteGroup}
