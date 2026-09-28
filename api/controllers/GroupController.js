@@ -49,6 +49,24 @@ const getGroups = async (req, res, next) => {
     }
 }
 
+const getGroupMembers = async (req, res, next) => {
+    try {
+        const { groupId } = req.params
+
+        const result = await pool.query(
+            `SELECT u.id, u.username, u.profile_image, gm.joined_at
+             FROM group_members gm
+             JOIN users u ON u.id = gm.user_id
+             WHERE gm.group_id = $1`,
+            [groupId]
+        )
+
+        res.json(result.rows)
+    } catch (error) {
+        next(error)
+    }
+}
+
 const deleteGroup = async (req, res, next) => {
     try {
         const { groupId } = req.params
@@ -72,4 +90,4 @@ const deleteGroup = async (req, res, next) => {
     }
 }
 
-export { getGroups, createGroup, deleteGroup}
+export { getGroups, getGroupMembers, createGroup, deleteGroup}
