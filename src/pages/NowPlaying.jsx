@@ -12,6 +12,7 @@ function NowPlaying() {
     const [favouriteTmdbIds, setFavouriteTmdbIds] = useState(new Set())
     const isLoggedIn = Boolean(localStorage.getItem('token'))
 
+
     useEffect(() => {
         if (!isLoggedIn) return
 
