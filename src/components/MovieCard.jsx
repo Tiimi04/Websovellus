@@ -33,7 +33,7 @@ function MovieCard({ movie, onAddFavourite, onRemoveFavourite, isFavourite }) {
                 <img
                     src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                     alt={movie.title}
-                    onClick={() => navigate(`/movie/${movie.id}`)}
+                    onClick={() => navigate(`/movie/${movie.tmdb_id ?? movie.id}`)}
                     width="150"
                 />
                 </div>
