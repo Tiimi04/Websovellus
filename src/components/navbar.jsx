@@ -1,8 +1,15 @@
-import React from "react";
-import { usestate, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import './navbar.css';
 
 const Navbar = () => {
+    const navigate = useNavigate()
+
+    const handleLogout = (event) => {
+        event.preventDefault()
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
+        navigate('/')
+    }
 
     return (      
       <div className="dropdown">
@@ -13,7 +20,7 @@ const Navbar = () => {
             <a href="/FrontPage">Etusivu</a>
             <a href="/profile">Profiili</a>
             <a href="/groups">Ryhmät</a>
-            <a href="/">Kirjaudu ulos</a>
+            <a href="/" onClick={handleLogout}>Kirjaudu ulos</a>
           </div>
       </div>
     )

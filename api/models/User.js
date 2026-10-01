@@ -5,6 +5,14 @@ const findByUsername = async (username) => {
   return result.rows[0]
 }
 
+const findPublicById = async (id) => {
+  const result = await pool.query(
+    'SELECT id, username, profile_image FROM users WHERE id = $1',
+    [id]
+  )
+  return result.rows[0]
+}
+
 const findByEmail = async (email) => {
   const result = await pool.query('SELECT * FROM users WHERE email = $1', [email])
   return result.rows[0]
@@ -38,10 +46,23 @@ const updateProfileImage = async (id, profileImagePath) => {
   return result.rows[0]
 }
 
+const searchUsers = async (querry) => {
+  const result = await pool.query(
+    `SELECT id, username, profile_image FROM users
+    WHERE username ILIKE $1 ORDER BY username LIMIT 50`,
+    [`%${querry}%`]
+  )
+  return result.rows
+}
+
+    
+
 export {
   findByUsername,
   findByEmail,
   createUser,
   deleteUserById,
-  updateProfileImage
+  updateProfileImage,
+  searchUsers,
+  findPublicById
 }
