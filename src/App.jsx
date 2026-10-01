@@ -9,9 +9,11 @@ import MoviePage from './pages/MoviePage'
 import Login from './pages/login.jsx'
 
 import GroupPage from './pages/GroupPage'
+import PublicProfile from './pages/PublicProfile'
 
 
 import Navbar from './components/navbar.jsx'
+import ProtectedRoute from './components/ProtectedRoute.jsx'
 
 function App() {
   const { pathname } = useLocation()
@@ -23,13 +25,14 @@ function App() {
       {!navbarHiddenPaths.includes(pathname) && <Navbar />}
       <Routes>
         <Route path="/" element={<Home />}/>  
-        <Route path="/FrontPage" element={<FrontPage />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/groups" element={<Groups />} />
+        <Route path="/FrontPage" element={<ProtectedRoute><FrontPage /></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+        <Route path="/groups" element={<ProtectedRoute><Groups /></ProtectedRoute>} />
         <Route path="/movie/:id" element={<MoviePage />} />
         <Route path="/login" element={<Login />} />
          <Route path="/register" element={<Register />} />
-        <Route path="/groups/:groupId" element={<GroupPage />} />
+        <Route path="/groups/:groupId" element={<ProtectedRoute><GroupPage /></ProtectedRoute>} />
+        <Route path="/users/:id" element={<PublicProfile />} />
       </Routes>
     </>
   )
