@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
 import { Link } from 'react-router-dom'
-import { getGroups, createGroup, deleteGroup, getGroupMembers } from '../services/groupService'
+import { getGroups,
+        createGroup,
+        deleteGroup,
+        getGroupMembers,
+        joinGroup,
+        getDiscoverGroups
+       } from '../services/groupService'
 import './groups.css'
 
 function Groups() {
@@ -10,12 +16,23 @@ function Groups() {
     const [isVisible, setIsVisible] = useState(false);
     const [membersGroupId, setMembersGroupId] = useState(null)
     const [membersByGroup, setMembersByGroup] = useState({})
+    const [activeView, setActiveView] = useState('myGroups')
 
     useEffect(() => {
+
+        const loadGroups = activeView === 'myGroups' ?
+            getGroups : getDiscoverGroups
+
+        loadGroups()
+            .then(setGroups)
+            .catch((err) => setError(err.message))
+    }, [activeView])
+
+    /*useEffect(() => {
         getGroups()
         .then(setGroups)
         .catch((err) => setError(err.message))
-    }, [])
+    }, [])*/
 
     const handleSubmit = async (event) => {
         event.preventDefault()
@@ -47,9 +64,7 @@ function Groups() {
             setMembersGroupId(null)
             return
         }
-
         setMembersGroupId(groupId)
-
         try {
             const members = await getGroupMembers(groupId)
             setMembersByGroup((currentMembers) => ({
@@ -59,6 +74,18 @@ function Groups() {
         } catch (err) {
             setError(err.message)
             setMembersGroupId(null)
+        }
+      }
+
+      const handleJoin = async (groupId) => {
+        setError('')
+        try {
+            await joinGroup(groupId)
+            setGroups((currentGroups) => (
+              currentGroups.filter((group) => group.id !== groupId)
+            ))
+        } catch (err) {
+          setError(err.message)
         }
       }
 
@@ -85,6 +112,11 @@ function Groups() {
               </form>
             </div>}
             </h2>
+            <button type="button"
+                onClick={() => setActiveView((current) =>
+                    current === 'myGroups' ? 'discover' : 'myGroups')}>
+                {activeView === 'myGroups' ? 'Löydä ryhmiä' : 'Omat ryhmät'}
+            </button>
           </div>
             {error && <p>{error}</p>}
           <div className="groupMap">
@@ -96,6 +128,14 @@ function Groups() {
                 <ul>
                   <li> Luotu {new Date(group.created).toLocaleDateString()}</li>
                   <li> Luoja {group.owner_username}</li>
+                  {activeView === 'discover' ? (
+                    <li>
+                      <button type='button' onClick={() => 
+                        handleJoin(group.id)}>Liity
+                      </button>
+                    </li>
+                    ) : (
+                  <>
                   <li>
                     <button className="deleteBtn" type="button"
                     onClick={() => handleDelete(group.id)}>
@@ -108,6 +148,8 @@ function Groups() {
                     Jäsenet
                     </button>
                   </li>
+                  </>
+                    )}
                 </ul>
                 </div>
                 {membersGroupId === group.id && (
