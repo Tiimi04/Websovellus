@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import NowPlaying from "./NowPlaying";
+import UserSearch from '../components/UserSearch.jsx'
 
 function Home() {
   const navigate = useNavigate()
@@ -14,6 +15,7 @@ function Home() {
           Rekisteröidy
         </button>
       <p>vaihda napit alemmas ja tee paremmat</p>
+      <UserSearch />
       <NowPlaying />
     </main>
   )

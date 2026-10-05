@@ -45,11 +45,19 @@ const removeMovieFromList = async (listId, movieId) => {
 // Palauttaa käyttäjän suosikkilistan elokuvat yhdistettynä movies-tauluun
 const getMoviesForUser = async (userId) => {
   const result = await pool.query(
-    `SELECT m.id, m.tmdb_id, m.title, m.poster_path, m.release_date, flm.added_at
+    `SELECT m.id, m.tmdb_id, m.title, m.poster_path, m.release_date, flm.added_at, AVG(r.rating) AS average_rating
      FROM favourite_list fl
      JOIN favourite_list_movies flm ON flm.favourite_list_id = fl.id
      JOIN movies m ON m.id = flm.movie_id
+     LEFT JOIN reviews r ON r.movie_id = m.id
      WHERE fl.user_id = $1
+     GROUP BY
+        m.id,
+        m.tmdb_id,
+        m.title,
+        m.poster_path,
+        m.release_date,
+        flm.added_at
      ORDER BY flm.added_at DESC`,
     [userId]
   )
