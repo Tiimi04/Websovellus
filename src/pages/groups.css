@@ -19,13 +19,15 @@
 }
 
 .deleteBtn {
-    background: #1a1a1a url('/public/burger-menu/deleteicon.png');
-    width: 5rem;
-    height: 3rem;
-    margin: auto;
-    padding: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 2rem;
+    padding: 0;
 }
 .deleteBtn img {
+    display: block;
     width: 2rem;
     height: 2rem;
 }
@@ -55,6 +57,12 @@ ul {
     float: none;
 }
 
+.membersBtn {
+    position: relative;
+    font-size: 14px;
+    margin: 0;
+    padding: 2px 5px 2px 5px;
+}
 .membersPanel {
     padding: 0px;
     margin: 0px;
