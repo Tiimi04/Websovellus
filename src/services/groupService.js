@@ -47,4 +47,34 @@ const deleteGroup = async (groupId) => {
     return parseResponse(response)
 }
 
-export { getGroups, getGroupMembers, createGroup, deleteGroup}
+const joinGroup = async (groupID) => {
+    const response = await fetch(`${API_URL}/api/groups/${groupID}/join`, {
+        method: 'POST',
+        headers: authHeaders()
+    })
+    return parseResponse(response)
+}
+
+const getDiscoverGroups = async () => {
+    const response = await fetch(`${API_URL}/api/groups/discover`, {
+        headers: authHeaders()
+    })
+    return parseResponse(response)
+}
+
+const leaveGroup = async (groupId) => {
+    const response = await fetch(`${API_URL}/api/groups/${groupId}/leave`, {
+        method: 'DELETE',
+        headers: authHeaders()
+    })
+    return parseResponse(response)
+}
+
+export { getGroups,
+        getDiscoverGroups,
+        getGroupMembers,
+        leaveGroup,
+        createGroup,
+        deleteGroup,
+        joinGroup 
+    }
