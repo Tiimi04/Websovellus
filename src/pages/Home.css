@@ -1,0 +1,48 @@
+.home-page {
+  width: 100%;
+}
+
+.home-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  text-align: left;
+}
+
+.home-header h1 {
+  margin: 0;
+}
+
+.home-auth-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.home-intro {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.home-movie-search .Search {
+  grid-column: auto;
+  grid-row: auto;
+  text-align: center;
+}
+
+.home-movie-search .NowPlaying {
+  grid-column: auto;
+  grid-row: auto;
+}
+
+@media (max-width: 480px) {
+  .home-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .home-auth-actions {
+    justify-content: flex-start;
+  }
+}
