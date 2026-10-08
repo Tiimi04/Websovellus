@@ -92,9 +92,7 @@ function PublicProfile() {
                     <MovieList movies={favourites} />
                 )}
             </section>
-            <button type="button" onClick={() => navigate(-1)}>
-                Takaisin
-            </button>
+           
         </main>
     )
 }
