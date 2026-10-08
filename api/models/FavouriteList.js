@@ -64,4 +64,61 @@ const getMoviesForUser = async (userId) => {
   return result.rows
 }
 
-export { getOrCreateDefaultList, addMovieToList, removeMovieFromList, getMoviesForUser }
+const getListVisibility = async (userId) => {
+  const result = await pool.query(
+    `SELECT is_public
+     FROM favourite_list
+     WHERE user_id = $1
+     ORDER BY id ASC
+     LIMIT 1`,
+    [userId]
+  )
+  return result.rows[0]?.is_public ?? false
+}
+
+const updateListVisibility = async (userId, isPublic) => {
+  const list = await getOrCreateDefaultList(userId)
+  const result = await pool.query(
+    `UPDATE favourite_list
+     SET is_public = $1
+     WHERE id = $2
+     RETURNING is_public`,
+    [isPublic, list.id]
+  )
+  return result.rows[0]
+}
+
+const getPublicListForUser = async (userId) => {
+  const result = await pool.query(
+    `SELECT fl.is_public, m.id, m.tmdb_id, m.title, m.poster_path, m.release_date,
+            flm.added_at, AVG(r.rating) AS average_rating
+     FROM (
+       SELECT id, is_public
+       FROM favourite_list
+       WHERE user_id = $1
+       ORDER BY id ASC
+       LIMIT 1
+     ) fl
+     LEFT JOIN favourite_list_movies flm
+       ON flm.favourite_list_id = fl.id AND fl.is_public = TRUE
+     LEFT JOIN movies m ON m.id = flm.movie_id
+     LEFT JOIN reviews r ON r.movie_id = m.id
+     GROUP BY fl.id, fl.is_public, m.id, flm.added_at
+     ORDER BY flm.added_at DESC`,
+    [userId]
+  )
+  return {
+    isPublic: result.rows[0]?.is_public ?? false,
+    movies: result.rows.filter((row) => row.id !== null)
+  }
+}
+
+export {
+  getOrCreateDefaultList,
+  addMovieToList,
+  removeMovieFromList,
+  getMoviesForUser,
+  getListVisibility,
+  updateListVisibility,
+  getPublicListForUser
+}
