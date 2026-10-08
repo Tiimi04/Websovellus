@@ -18,11 +18,11 @@ import ProtectedRoute from './components/ProtectedRoute.jsx'
 function App() {
   const { pathname } = useLocation()
   //  Sivut missä navbar piilossa
-  const navbarHiddenPaths = ['/login', '/register','/' ]
-  const showNavbar = !navbarHiddenPaths.includes(pathname)
+  const navbarHiddenPaths = ['/login', '/users', '/register','/' ]
+  const showNavbar = !navbarHiddenPaths.includes(pathname) && !pathname.startsWith('/users/')
   return (
     <>
-      {!navbarHiddenPaths.includes(pathname) && <Navbar />}
+      {showNavbar && <Navbar />}
       <Routes>
         <Route path="/" element={<Home />}/>  
         <Route path="/FrontPage" element={<ProtectedRoute><FrontPage /></ProtectedRoute>} />
