@@ -23,9 +23,13 @@ function NowPlaying() {
 
     const handleAddFavourite = (movie) => {
         addFavourite(movie)
-            .then(() => setFavouriteTmdbIds(prev => new Set(prev).add(movie.id)))
+            .then(() => {
+                const tmdbId = movie.tmdb_id ?? movie.id
+                setFavouriteTmdbIds(prev => new Set([...prev, tmdbId]))
+            })
             .catch(error => console.error('ADD FAVOURITE ERROR:', error))
     }
+    
 
     useEffect(() => {
     fetch('/api/movies')
@@ -80,6 +84,8 @@ function NowPlaying() {
     return (
         <div className="NowPlayingPage">
 
+            <h1 className="Moviepagename">Leffat.net</h1>
+
 
             <div className="Search">
                 <h1>Elokuvien haku</h1>
@@ -118,6 +124,7 @@ function NowPlaying() {
         movies={topRatedMovies}
         onAddFavourite={isLoggedIn ? handleAddFavourite : undefined}
         favouriteTmdbIds={favouriteTmdbIds}
+        showRanking={true}
     />
 </div>
 

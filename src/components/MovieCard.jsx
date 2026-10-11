@@ -23,7 +23,7 @@ const genres = {
     37: "Western"
 };
 
-function MovieCard({ movie, onAddFavourite, onRemoveFavourite, isFavourite }) {
+function MovieCard({ movie, onAddFavourite, onRemoveFavourite, isFavourite, ranking }) {
     const navigate = useNavigate();
     return (
         <div>
@@ -36,6 +36,9 @@ function MovieCard({ movie, onAddFavourite, onRemoveFavourite, isFavourite }) {
                     onClick={() => navigate(`/movie/${movie.tmdb_id ?? movie.id}`)}
                     width="150"
                 />
+                {ranking != null && (
+                    <span className="MovieRanking">{ranking}</span>
+                )}
                 </div>
             )}
             <h2>{movie.title}</h2>

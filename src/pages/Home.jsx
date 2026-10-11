@@ -7,7 +7,6 @@ function Home() {
   return (
     <main className="home-page">
       <header className="home-header">
-        <h1>Leffat.net</h1>
         <div className="home-auth-actions">
           <button type="button" onClick={() => navigate('/login')}>
           Kirjaudu
