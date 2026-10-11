@@ -50,7 +50,7 @@ const addFavourite = async (movie) => {
     method: 'POST',
     headers: authHeaders(),
     body: JSON.stringify({
-      tmdbId: movie.id,
+      tmdbId: movie.id ?? movie.tmdb_id,
       title: movie.title,
       posterPath: movie.poster_path,
       releaseDate: movie.release_date
