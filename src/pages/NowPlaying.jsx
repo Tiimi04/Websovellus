@@ -1,15 +1,15 @@
 import MovieList from "../components/MovieList"
-import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from "react";
 import { getFavourites, addFavourite } from "../services/favouriteService"
 import './NowPlaying.css'
 
+
 function NowPlaying() {
     const [search, setSearch] = useState('')
-    const navigate = useNavigate()
     const [movies, setMovies] = useState([])
     const [searchResults, setSearchResults] = useState([])
     const [favouriteTmdbIds, setFavouriteTmdbIds] = useState(new Set())
+    const [topRatedMovies, setTopRatedMovies] = useState([])
     const isLoggedIn = Boolean(localStorage.getItem('token'))
 
 
@@ -58,6 +58,24 @@ function NowPlaying() {
         }
     }, [search])
 
+   useEffect(() => {
+    fetch('/api/movies/top-rated?limit=5')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Top rated fetch failed: ${response.status}`)
+            }
+
+            return response.json()
+        })
+        .then(data => {
+            console.log('TOP RATED DATA:', data)
+            setTopRatedMovies(data)
+        })
+        .catch(error => {
+            console.error('TOP RATED ERROR:', error)
+        })
+}, [])
+
 
     return (
         <div className="NowPlayingPage">
@@ -92,6 +110,16 @@ function NowPlaying() {
                 />
             </div>
             </div>
+
+            <div className="TopRated">
+    <h1>Parhaiten arvioidut</h1>
+
+    <MovieList
+        movies={topRatedMovies}
+        onAddFavourite={isLoggedIn ? handleAddFavourite : undefined}
+        favouriteTmdbIds={favouriteTmdbIds}
+    />
+</div>
 
         </div>
     )

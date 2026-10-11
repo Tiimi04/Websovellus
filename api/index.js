@@ -10,6 +10,7 @@ import groupRouter from './routes/groupRouter.js'
 import MoviePageRouter from './routes/MoviePageRouter.js'
 import ReviewRouter from './routes/ReviewRouter.js'
 import userRouter from './routes/userRouter.js'
+import TopRatedRouter from './routes/TopRatedMovieRouter.js'
 
 const port = process.env.PORT || 3000
 
@@ -21,6 +22,7 @@ app.use(express.urlencoded({ extended: false }))
 
 app.use('/', testRouter)
 app.use('/api', authRouter)
+app.use('/api/movies/top-rated', TopRatedRouter)
 app.use('/api/movies', NowPlayingRouter)
 app.use('/api/favourites', favouriteRouter)
 app.use('/api/groups', groupRouter)

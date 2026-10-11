@@ -29,4 +29,21 @@ const findById = async (id) => {
   return result.rows[0]
 }
 
-export { findByTmdbId, createMovie, findOrCreateByTmdbId, findById }
+const topRatedMovies = async (limit = 5) => {
+  const result = await pool.query(
+    `SELECT m.tmdb_id,
+    m.title,
+    m.poster_path,
+    m.release_date,
+    AVG(r.rating) AS average_rating
+     FROM movies m
+     JOIN reviews r ON m.id = r.movie_id
+     GROUP BY m.id
+     ORDER BY average_rating DESC
+     LIMIT $1`,
+    [limit]
+  )
+  return result.rows
+}
+
+export { findByTmdbId, createMovie, findOrCreateByTmdbId, findById, topRatedMovies }
