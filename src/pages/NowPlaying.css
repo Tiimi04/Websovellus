@@ -2,26 +2,97 @@
   width: 100%;
 }
 
-.Search {
+.NowPlayingPage {
   width: 100%;
-  height: 500px;
-  text-align: center;
+}
+
+.search-and-movies-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 24px;
+}
+
+.search-and-movies-layout > .user-search {
+  grid-column: 1;
+  grid-row: 1;
+  max-width: none;
+  margin: 0;
+}
+
+.search-and-movies-layout > .NowPlayingPage {
+  display: contents;
+}
+
+.Search {
+  grid-column: 2;
+  grid-row: 1;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  text-align: right;
+}
+
+.Search h1,
+.search-and-movies-layout .user-search h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.5rem;
+}
+
+.Search input {
+  box-sizing: border-box;
+  max-width: 100%;
 }
 
 .NowPlaying {
-  position: absolute;
-  right: 40px;
-  top: 100px;
-  width: 250px;
+  grid-column: 1 / -1;
+  grid-row: 2;
+  width: 100%;
   text-align: center;
 }
 
 .NowPlayingList {
-  max-height: 600px;
-  overflow-y: auto;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+}
+
+.NowPlayingList > div {
+  display: flex;
+  align-items: stretch;
+  gap: 16px;
+  width: max-content;
+  min-width: 100%;
+  padding: 8px 4px 16px;
+}
+
+.NowPlayingList > div > div {
+  flex: 0 0 180px;
+  scroll-snap-align: start;
 }
 
 .SearchResults {
   max-height: 600px;
   overflow-y: auto;
+}
+
+@media (max-width: 700px) {
+  .search-and-movies-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .search-and-movies-layout > .user-search,
+  .Search {
+    grid-column: 1;
+    grid-row: auto;
+    text-align: left;
+  }
+
+  .NowPlaying {
+    grid-row: auto;
+  }
+
 }

@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import { getGroups, getGroupMembers, deleteGroup, createGroup } from '../services/groupService'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { getGroups, getGroupMembers, deleteGroup, leaveGroup } from '../services/groupService'
 import './GroupPage.css'
 
 function GroupPage() {
     const { groupId } = useParams()
+  const navigate = useNavigate()
     const [members, setMembers] = useState([])
     const [groups, setGroups] = useState([])
-    const [groupName, setGroupName] = useState('')
+    //const [groupName, setGroupName] = useState('') // Ryhmän muokkaustoiminto mitä lisäilen myöhemmin
     const [error, setError] = useState('')
+  const isMember = groups.some((group) => String(group.id) === groupId)
 
     useEffect(() => {
         getGroups()
@@ -34,6 +36,16 @@ function GroupPage() {
         }
     }
 
+    const handleLeaveGroup = async () => {
+        setError('')
+        try {
+          await leaveGroup(groupId)
+          navigate('/groups')
+        } catch (err) {
+          setError(err.message)
+        }
+    }
+  
 	return (
       <main>
         <Link to={"/groups"}>Takaisin ryhmät sivulle</Link>
@@ -53,6 +65,11 @@ function GroupPage() {
                 </li>
               ))}
             </ul>
+            {isMember && (
+              <button type='button' onClick={handleLeaveGroup}>
+                Poistu ryhmästä
+              </button>
+            )}
           </div>
         </div>
         <div className='managing'>

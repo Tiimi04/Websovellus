@@ -1,7 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getProfileImageUrl, selectProfileImage } from '../services/authService'
-import { getFavourites, removeFavourite } from '../services/favouriteService'
+import {
+    getFavourites,
+    getListVisibility,
+    updateListVisibility,
+    removeFavourite
+} from '../services/favouriteService'
 import MovieList from '../components/MovieList'
 import './Profile.css'
 
@@ -29,12 +34,62 @@ function Profile() {
     const [error, setError] = useState('')
     const [favourites, setFavourites] = useState([])
     const [favouritesError, setFavouritesError] = useState('')
+    const [isListPublic, setIsListPublic] = useState(false)
+    const [savingVisibility, setSavingVisibility] = useState(false)
+    const [loadingVisibility, setLoadingVisibility] = useState(true)
+    const [visibilityError, setVisibilityError] = useState('')
+    const [shareMessage, setShareMessage] = useState('')
+    const [shareError, setShareError] = useState('')
 
     useEffect(() => {
         getFavourites()
             .then(setFavourites)
             .catch((err) => setFavouritesError(err.message))
+        getListVisibility()
+            .then(({ isPublic }) => setIsListPublic(isPublic))
+            .catch((err) => setVisibilityError(err.message))
+            .finally(() => setLoadingVisibility(false))
     }, [])
+
+    const handleVisibilityChange = async (event) => {
+        const isPublic = event.target.checked
+        setVisibilityError('')
+        setShareMessage('')
+        setShareError('')
+        setSavingVisibility(true)
+
+        try {
+            const updated = await updateListVisibility(isPublic)
+            setIsListPublic(updated.isPublic)
+        } catch (err) {
+            setVisibilityError(err.message)
+        } finally {
+            setSavingVisibility(false)
+        }
+    }
+
+    const handleShareList = async () => {
+        setShareMessage('')
+        setShareError('')
+
+        if (!isListPublic || !user.id) {
+            setShareError('Tee suosikkilistastasi ensin julkinen, jotta voit jakaa sen.')
+            return
+        }
+
+        if (!navigator.clipboard?.writeText) {
+            setShareError('Linkin kopiointi ei ole käytettävissä tässä selaimessa.')
+            return
+        }
+
+        try {
+            const shareUrl = `${window.location.origin}/users/${encodeURIComponent(user.id)}`
+            await navigator.clipboard.writeText(shareUrl)
+            setShareMessage('Linkki kopioitu leikepöydälle.')
+        } catch (err) {
+            setShareError(`Linkin kopiointi epäonnistui: ${err.message}`)
+        }
+    }
 
     const handleRemoveFavourite = (movie) => {
         removeFavourite(movie.id)
@@ -93,7 +148,45 @@ function Profile() {
             </div>
 
             <section className="favourites-section">
-                <h2>Suosikkilistani</h2>
+                <div className="favourites-heading">
+                    <h2>Suosikkilistani</h2>
+                    <button
+                        type="button"
+                        className="share-list-button"
+                        onClick={handleShareList}
+                        disabled={!isListPublic || loadingVisibility || savingVisibility || !user.id}
+                        aria-label="Kopioi suosikkilistan jakolinkki"
+                        title={isListPublic ? 'Kopioi suosikkilistan jakolinkki' : 'Tee lista julkiseksi ennen jakamista'}
+                    >
+                        <img
+                            src="/share.png"
+                            alt=""
+                            onError={(event) => {
+                                event.currentTarget.hidden = true
+                            }}
+                        />
+                        <span>Jaa</span>
+                    </button>
+                </div>
+                <label>
+                    <input
+                        type="checkbox"
+                        checked={isListPublic}
+                        onChange={handleVisibilityChange}
+                        disabled={savingVisibility || loadingVisibility}
+                    />
+                    Tee suosikkilistastani julkinen
+                </label>
+                {visibilityError && <p style={{ color: 'red' }}>{visibilityError}</p>}
+                <p>{isListPublic ? 'Muut käyttäjät näkevät listasi.' : 'Lista näkyy vain sinulle.'}</p>
+                {!isListPublic && <p>Aseta lista julkiseksi ennen jakolinkin kopiointia.</p>}
+                {shareMessage && <p role="status">{shareMessage}</p>}
+                {shareError && <p role="alert" style={{ color: 'red' }}>{shareError}</p>}
+                {user.id && (
+                    <button type="button" onClick={() => navigate(`/users/${user.id}`)}>
+                        Näytä julkinen profiili
+                    </button>
+                )}
                 {favouritesError && <p style={{ color: 'red' }}>{favouritesError}</p>}
                 {favourites.length === 0 ? (
                     <p>Et ole vielä lisännyt yhtään elokuvaa suosikkeihin.</p>

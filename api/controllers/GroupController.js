@@ -49,6 +49,36 @@ const getGroups = async (req, res, next) => {
     }
 }
 
+const getDiscoverGroups = async (req, res, next) => {
+    try {
+        const result = await pool.query(
+            `Select g.id, g.name, g.owner_id, g.created,
+            u.username AS owner_username FROM groups g
+            JOIN users u ON u.id = g.owner_id
+            WHERE g.id NOT IN (SELECT group_id FROM group_members WHERE user_id = $1)`,
+            [req.user.id]
+        )
+
+        res.json(result.rows)
+    } catch (error) {
+        next(error)
+    }
+}
+
+const joinGroup = async (req, res, next) => {
+    try {
+        const result = await pool.query(
+            `INSERT INTO group_members (group_id, user_id)
+            VALUES ($1, $2) RETURNING group_id, user_id`,
+            [req.params.groupId, req.user.id]
+        )
+
+        res.status(201).json(result.rows[0])
+    } catch (error) {
+        next(error)
+    }
+}
+
 const getGroupMembers = async (req, res, next) => {
     try {
         const { groupId } = req.params
@@ -79,7 +109,7 @@ const deleteGroup = async (req, res, next) => {
         )
 
         if (!result.rows[0]) {
-            const error = new Error('Ryhmää ei löytynyt tai sinulla ei ole oikeutta poistaa sitä')
+            const error = new Error('Ryhmää ei löytynyt')
             error.status = 404
             throw error
         }
@@ -90,4 +120,33 @@ const deleteGroup = async (req, res, next) => {
     }
 }
 
-export { getGroups, getGroupMembers, createGroup, deleteGroup}
+const leaveGroup = async (req, res, next) => {
+    try {
+        const { groupId } = req.params
+        const result = await pool.query(
+            `DELETE FROM group_members
+            WHERE group_id = $1 AND user_id = $2
+            RETURNING group_id, user_id`,
+            [groupId, req.user.id]
+        )
+
+        if (!result.rows[0]) {
+            const error = new Error('You are not a member of this group')
+            error.status = 404
+            throw error
+        }
+
+        res.json(result.rows[0])
+    } catch (error) {
+        next(error)
+    }
+}
+
+export { getGroups,
+    getGroupMembers,
+    createGroup,
+    deleteGroup,
+    getDiscoverGroups,
+    joinGroup,
+    leaveGroup
+}

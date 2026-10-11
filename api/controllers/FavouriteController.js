@@ -3,7 +3,10 @@ import {
   getOrCreateDefaultList,
   addMovieToList,
   removeMovieFromList,
-  getMoviesForUser
+  getMoviesForUser,
+  getListVisibility,
+  updateListVisibility,
+  getPublicListForUser
 } from '../models/FavouriteList.js'
 
 const getFavourites = async (req, res, next) => {
@@ -55,4 +58,52 @@ const removeFavourite = async (req, res, next) => {
   }
 }
 
-export { getFavourites, addFavourite, removeFavourite }
+const getListVisibilityUser = async (req, res, next) => {
+  try {
+    const isPublic = await getListVisibility(req.user.id)
+    res.json({ isPublic })
+  } catch (error) {
+    next(error)
+  }
+}
+
+const updateListVisibilityUser = async (req, res, next) => {
+  try {
+    const { isPublic } = req.body
+    if (typeof isPublic !== 'boolean') {
+      const error = new Error('isPublic-arvon tulee olla totuusarvo')
+      error.status = 400
+      throw error
+    }
+
+    const updated = await updateListVisibility(req.user.id, isPublic)
+    res.json({ isPublic: updated.is_public })
+  } catch (error) {
+    next(error)
+  }
+}
+
+const getPublicFavourites = async (req, res, next) => {
+  try {
+    const userId = Number(req.params.userId)
+    if (!Number.isInteger(userId) || userId < 1) {
+      const error = new Error('Virheellinen käyttäjätunnus')
+      error.status = 400
+      throw error
+    }
+
+    const publicList = await getPublicListForUser(userId)
+    res.json(publicList)
+  } catch (error) {
+    next(error)
+  }
+}
+
+export {
+  getFavourites,
+  addFavourite,
+  removeFavourite,
+  getListVisibilityUser,
+  updateListVisibilityUser,
+  getPublicFavourites
+}

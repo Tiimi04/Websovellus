@@ -24,6 +24,27 @@ const getFavourites = async () => {
   return parseResponse(response)
 }
 
+const getListVisibility = async () => {
+  const response = await fetch(`${API_URL}/api/favourites/visibility`, {
+    headers: authHeaders()
+  })
+  return parseResponse(response)
+}
+
+const updateListVisibility = async (isPublic) => {
+  const response = await fetch(`${API_URL}/api/favourites/visibility`, {
+    method: 'PUT',
+    headers: authHeaders(),
+    body: JSON.stringify({ isPublic })
+  })
+  return parseResponse(response)
+}
+
+const getPublicFavourites = async (userId) => {
+  const response = await fetch(`${API_URL}/api/favourites/public/${encodeURIComponent(userId)}`)
+  return parseResponse(response)
+}
+
 const addFavourite = async (movie) => {
   const response = await fetch(`${API_URL}/api/favourites`, {
     method: 'POST',
@@ -46,4 +67,11 @@ const removeFavourite = async (movieId) => {
   return parseResponse(response)
 }
 
-export { getFavourites, addFavourite, removeFavourite }
+export {
+  getFavourites,
+  getListVisibility,
+  updateListVisibility,
+  getPublicFavourites,
+  addFavourite,
+  removeFavourite
+}
