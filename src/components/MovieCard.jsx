@@ -23,7 +23,7 @@ const genres = {
     37: "Western"
 };
 
-function MovieCard({ movie, onAddFavourite, onRemoveFavourite, isFavourite, ranking }) {
+function MovieCard({ movie, onAddFavourite, onRemoveFavourite, isLoggedIn = false, isFavourite, ranking }) {
     const navigate = useNavigate();
     return (
         <div>
@@ -57,7 +57,7 @@ function MovieCard({ movie, onAddFavourite, onRemoveFavourite, isFavourite, rank
                     Poista suosikeista
                 </button>
             )}
-            {onAddFavourite && !onRemoveFavourite && (
+            {isLoggedIn && onAddFavourite && !onRemoveFavourite && (
                 <button type="button" onClick={() => onAddFavourite(movie)} disabled={isFavourite}>
                     {isFavourite ? 'Suosikeissa' : 'Lisää suosikkeihin'}
                 </button>

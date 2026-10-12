@@ -1,6 +1,6 @@
 import MovieCard from "./MovieCard"
 
-function MovieList({ movies, onAddFavourite, onRemoveFavourite, favouriteTmdbIds, showRanking = false }) {
+function MovieList({ movies, onAddFavourite, onRemoveFavourite, favouriteTmdbIds, isLoggedIn = false, showRanking = false }) {
     return (
         <div>
             {movies.map((movie, index) => {
@@ -11,6 +11,7 @@ function MovieList({ movies, onAddFavourite, onRemoveFavourite, favouriteTmdbIds
                         movie={movie}
                         onAddFavourite={onAddFavourite}
                         onRemoveFavourite={onRemoveFavourite}
+                        isLoggedIn={isLoggedIn}
                         isFavourite={favouriteTmdbIds?.has(tmdbId)}
                         ranking={showRanking ? index + 1 : null}
                     />
