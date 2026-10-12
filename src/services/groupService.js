@@ -47,6 +47,15 @@ const deleteGroup = async (groupId) => {
     return parseResponse(response)
 }
 
+const updateGroup = async (groupId, name) => {
+    const response = await fetch(`${API_URL}/api/groups/${groupId}`, {
+        method: 'PUT',
+        headers: authHeaders(),
+        body: JSON.stringify({ name })
+    })
+    return parseResponse(response)
+}
+
 const joinGroup = async (groupID) => {
     const response = await fetch(`${API_URL}/api/groups/${groupID}/join`, {
         method: 'POST',
@@ -76,5 +85,6 @@ export { getGroups,
         leaveGroup,
         createGroup,
         deleteGroup,
+        updateGroup,
         joinGroup 
     }
