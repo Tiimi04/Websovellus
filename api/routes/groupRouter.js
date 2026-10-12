@@ -4,6 +4,7 @@ import { createGroup,
         getGroups,
         getGroupMembers,
         deleteGroup,
+        updateGroup,
         joinGroup,
         getDiscoverGroups,
         leaveGroup } from '../controllers/GroupController.js'
@@ -16,6 +17,7 @@ router.get('/discover', authenticate, getDiscoverGroups)
 router.post('/:groupId/join', authenticate, joinGroup)
 router.post('/', authenticate, createGroup)
 router.delete('/:groupId', authenticate, deleteGroup)
+router.put('/:groupId', authenticate, updateGroup)
 router.delete('/:groupId/leave', authenticate, leaveGroup)
 
 export default router
