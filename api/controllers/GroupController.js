@@ -1,5 +1,7 @@
 import { pool } from '../models/db.js'
 
+// const GROUP_AVATARS = ['/group-avatars/grpimg.png', '/group-avatars/grpimg2.png']
+
 const createGroup = async (req, res, next) => {
     try {
         const { name } = req.body
@@ -120,6 +122,37 @@ const deleteGroup = async (req, res, next) => {
     }
 }
 
+const updateGroup = async (req, res, next) => {
+    try {
+        const { groupId } = req.params
+        const { name } = req.body
+
+        if (!name?.trim()) {
+            const error = new Error('Ryhmän nimi ei voi olla tyhjä')
+            error.status = 400
+            throw error
+        }
+
+        const result = await pool.query(
+            `UPDATE groups
+             SET name = $1
+             WHERE id = $2 AND owner_id = $3
+             RETURNING id, name, owner_id, created`,
+            [name.trim(), groupId, req.user.id]
+        )
+
+        if (!result.rows[0]) {
+            const error = new Error('Ryhmää ei löytynyt')
+            error.status = 404
+            throw error
+        }
+
+        res.json(result.rows[0])
+    } catch (error) {
+        next(error)
+    }
+}
+
 const leaveGroup = async (req, res, next) => {
     try {
         const { groupId } = req.params
@@ -146,6 +179,7 @@ export { getGroups,
     getGroupMembers,
     createGroup,
     deleteGroup,
+    updateGroup,
     getDiscoverGroups,
     joinGroup,
     leaveGroup
