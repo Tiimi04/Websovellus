@@ -1,16 +1,34 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { getGroups, getGroupMembers, deleteGroup, leaveGroup } from '../services/groupService'
+import { getGroups,
+        getGroupMembers,
+        deleteGroup,
+        updateGroup,
+        leaveGroup,
+        getGroupMovies } from '../services/groupService'
+import MovieList from '../components/MovieList'
 import './GroupPage.css'
+
+const groupAvatars = [
+  { id: 'group-1', path: '/group-avatars/grpimg.png' },
+  { id: 'group-2', path: '/group-avatars/grpimg2.png'},
+  { id: 'group-3', path: '/group-avatars/grpimg3.png' }
+]
 
 function GroupPage() {
     const { groupId } = useParams()
-  const navigate = useNavigate()
+    const navigate = useNavigate()
     const [members, setMembers] = useState([])
     const [groups, setGroups] = useState([])
-    //const [groupName, setGroupName] = useState('') // Ryhmän muokkaustoiminto mitä lisäilen myöhemmin
+    const [isEditing, setIsEditing] = useState(false)
+    const [editedGroupName, setEditedGroupName] = useState('')
+    const [editedGroupAvatar, setEditedGroupAvatar] = useState('')
     const [error, setError] = useState('')
-  const isMember = groups.some((group) => String(group.id) === groupId)
+    const [groupMovies, setGroupMovies] = useState([])
+    const group = groups.find((item) => String(item.id) === groupId)
+    const isMember = Boolean(group)
+    const currentUser = JSON.parse(localStorage.getItem('user') || 'null')
+    const isCreator = group && String(group.owner_id) === String(currentUser?.id)
 
     useEffect(() => {
         getGroups()
@@ -24,6 +42,12 @@ function GroupPage() {
             .catch((err) => setError(err.message))
     }, [groupId])
 
+    useEffect(() => {
+        getGroupMovies(groupId)
+            .then(setGroupMovies)
+            .catch((err) => setError(err.message))
+    }, [groupId])
+
     const handleDeleteGroup = async (groupId) => {
         setError('')
         try {
@@ -31,6 +55,27 @@ function GroupPage() {
           setGroups((currentGroups) => (
             currentGroups.filter((group) => group.id !== groupId)
           ))
+          navigate('/groups')
+        } catch (err) {
+          setError(err.message)
+        }
+    }
+
+    const handleEditGroup = () => {
+        setEditedGroupName(group?.name ?? '')
+        setEditedGroupAvatar(group?.avatar || groupAvatars[0].path)
+        setIsEditing(true)
+    }
+
+    const handleSaveGroup = async (event) => {
+        event.preventDefault()
+        setError('')
+        try {
+          const updatedGroup = await updateGroup(groupId, editedGroupName, editedGroupAvatar)
+          setGroups((currentGroups) => currentGroups.map((item) => (
+            String(item.id) === groupId ? { ...item, ...updatedGroup } : item
+          )))
+          setIsEditing(false)
         } catch (err) {
           setError(err.message)
         }
@@ -45,14 +90,42 @@ function GroupPage() {
           setError(err.message)
         }
     }
-  
+
 	return (
       <main>
         <Link to={"/groups"}>Takaisin ryhmät sivulle</Link>
         <div className='groupInfo'>
+          <img
+            src={group?.avatar || groupAvatars[0].path}
+            alt=""
+          />
           <h2>
-            <img src='/public/profile-avatars/2.png'></img>
-            {groups.find((group) => String(group.id) === groupId)?.name}
+            {isEditing ? (
+              <form onSubmit={handleSaveGroup}>
+                <input
+                  value={editedGroupName}
+                  onChange={(event) => setEditedGroupName(event.target.value)}
+                  required
+                />
+                <button type='submit' className="saveButton">Tallenna</button>
+                <button type='button' className="cancelButton"
+                onClick={() => setIsEditing(false)}>Peruuta</button>
+                <div className='group-avatar-options'>
+                  {groupAvatars.map((avatar) => (
+                    <button
+                      key={avatar.id}
+                      type='button'
+                      className={editedGroupAvatar === avatar.path ? 'selected' : ''}
+                      onClick={() => setEditedGroupAvatar(avatar.path)}
+                      aria-label={`Valitse ryhmäkuva ${avatar.id}`}
+                      aria-pressed={editedGroupAvatar === avatar.path}
+                    >
+                      <img src={avatar.path} alt="" />
+                    </button>
+                  ))}
+                </div>
+              </form>
+            ) : group?.name}
           </h2>
           <div classname='userMap'>
             <ul>
@@ -61,7 +134,7 @@ function GroupPage() {
                   {member.profile_image && (
                     <img src={member.profile_image}/>
                   )}
-                  <span> {member.username} </span>
+                  <Link to={`/users/${member.id}`}>{member.username}</Link>
                 </li>
               ))}
             </ul>
@@ -72,10 +145,24 @@ function GroupPage() {
             )}
           </div>
         </div>
+        <section className='groupMovies'>
+          <h2>Ryhmän suosikit</h2>
+          <MovieList movies={groupMovies} />
+        </section>
         <div className='managing'>
-          <button onClick={handleDeleteGroup} id='deleteBut'>
-            <img src='/public/burger-menu/deleteicon.png'></img>
-          </button>
+          {isCreator && (
+            <>
+              <button onClick={() => handleDeleteGroup(groupId)} id='deleteBut'>
+              <img src='/public/burger-menu/deleteicon.png'></img>
+              </button>
+          
+              {!isEditing && (
+                <button type='button' onClick={handleEditGroup} id='editBut'>
+                <img src='/burger-menu/editicon.png' alt='' />
+                </button>
+              )}
+            </>
+          )}
         </div>
 		</main>
 	)

@@ -100,6 +100,7 @@ function NowPlaying() {
                 <div className="SearchResults">
                     <MovieList
                         movies={searchResults}
+                        isLoggedIn={isLoggedIn}
                         onAddFavourite={isLoggedIn ? handleAddFavourite : undefined}
                         favouriteTmdbIds={favouriteTmdbIds}
                     />
@@ -111,6 +112,7 @@ function NowPlaying() {
             <div className="NowPlayingList">
                 <MovieList
                     movies={movies}
+                    isLoggedIn={isLoggedIn}
                     onAddFavourite={isLoggedIn ? handleAddFavourite : undefined}
                     favouriteTmdbIds={favouriteTmdbIds}
                 />
@@ -122,6 +124,7 @@ function NowPlaying() {
 
     <MovieList
         movies={topRatedMovies}
+        isLoggedIn={isLoggedIn}
         onAddFavourite={isLoggedIn ? handleAddFavourite : undefined}
         favouriteTmdbIds={favouriteTmdbIds}
         showRanking={true}

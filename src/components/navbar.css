@@ -7,6 +7,9 @@
 
 /* Menu nappi */
 .dropdown .dropbtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border: none;
   outline: none;
   background-color: #1a1a1a;
@@ -44,6 +47,6 @@
 }
 
 .dropdown .dropbtn img {
-  height: 40px;
-  width: 40px;
+  height: 2rem;
+  width: 2rem;
 }
