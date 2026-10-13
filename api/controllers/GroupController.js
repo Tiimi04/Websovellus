@@ -1,6 +1,10 @@
 import { pool } from '../models/db.js'
 
-// const GROUP_AVATARS = ['/group-avatars/grpimg.png', '/group-avatars/grpimg2.png']
+const GROUP_AVATARS = [
+    '/group-avatars/grpimg.png',
+    '/group-avatars/grpimg2.png',
+    '/group-avatars/grpimg3.png'
+]
 
 const createGroup = async (req, res, next) => {
     try {
@@ -14,7 +18,7 @@ const createGroup = async (req, res, next) => {
 
         const result = await pool.query(
             `INSERT INTO groups (name, owner_id) VALUES ($1, $2) RETURNING
-            id, name, owner_id, created`,
+            id, name, owner_id, created, avatar`,
             [name.trim(), req.user.id]
         )
 
@@ -37,7 +41,7 @@ const getGroups = async (req, res, next) => {
 
     try {
         const result = await pool.query(
-            `SELECT g.id, g.name, g.owner_id, g.created,
+            `SELECT g.id, g.name, g.owner_id, g.created, g.avatar,
             u.username AS owner_username FROM groups g
             JOIN users u ON u.id = g.owner_id
             JOIN group_members gm ON gm.group_id = g.id WHERE gm.user_id = $1
@@ -54,7 +58,7 @@ const getGroups = async (req, res, next) => {
 const getDiscoverGroups = async (req, res, next) => {
     try {
         const result = await pool.query(
-            `Select g.id, g.name, g.owner_id, g.created,
+            `Select g.id, g.name, g.owner_id, g.created, g.avatar,
             u.username AS owner_username FROM groups g
             JOIN users u ON u.id = g.owner_id
             WHERE g.id NOT IN (SELECT group_id FROM group_members WHERE user_id = $1)`,
@@ -99,6 +103,27 @@ const getGroupMembers = async (req, res, next) => {
     }
 }
 
+const getGroupMovies = async (req, res, next) => {
+    try {
+        const { groupId } = req.params
+
+        const result = await pool.query(
+            `SELECT DISTINCT m.id, m.tmdb_id, m.title, m.poster_path, m.release_date,
+            (SELECT AVG(r.rating) FROM reviews r WHERE r.movie_id = m.id) AS average_rating
+            FROM group_members gm
+            JOIN favourite_list fl ON fl.user_id = gm.user_id
+            JOIN favourite_list_movies flm ON flm.favourite_list_id = fl.id
+            JOIN movies m ON m.id = flm.movie_id
+            WHERE gm.group_id = $1
+            ORDER BY m.title DESC`,
+            [groupId]
+        )
+        res.json(result.rows)
+    } catch (error) {
+        next(error)
+    }
+}
+
 const deleteGroup = async (req, res, next) => {
     try {
         const { groupId } = req.params
@@ -125,7 +150,7 @@ const deleteGroup = async (req, res, next) => {
 const updateGroup = async (req, res, next) => {
     try {
         const { groupId } = req.params
-        const { name } = req.body
+        const { name, avatar } = req.body
 
         if (!name?.trim()) {
             const error = new Error('Ryhmän nimi ei voi olla tyhjä')
@@ -133,12 +158,18 @@ const updateGroup = async (req, res, next) => {
             throw error
         }
 
+        if (!GROUP_AVATARS.includes(avatar)) {
+            const error = new Error('Virheellinen profiilikuva')
+            error.status = 400
+            throw error
+        }
+
         const result = await pool.query(
             `UPDATE groups
-             SET name = $1
+             SET name = $1, avatar = $4
              WHERE id = $2 AND owner_id = $3
-             RETURNING id, name, owner_id, created`,
-            [name.trim(), groupId, req.user.id]
+             RETURNING id, name, owner_id, avatar, created`,
+            [name.trim(), groupId, req.user.id, avatar]
         )
 
         if (!result.rows[0]) {
@@ -182,5 +213,6 @@ export { getGroups,
     updateGroup,
     getDiscoverGroups,
     joinGroup,
-    leaveGroup
+    leaveGroup,
+    getGroupMovies,
 }
