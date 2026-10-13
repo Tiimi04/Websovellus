@@ -1,8 +1,19 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { getGroups, getGroupMembers, deleteGroup, updateGroup, leaveGroup } from '../services/groupService'
+import { getGroups,
+        getGroupMembers,
+        deleteGroup,
+        updateGroup,
+        leaveGroup,
+        getGroupMovies } from '../services/groupService'
+import MovieList from '../components/MovieList'
 import './GroupPage.css'
 
+const groupAvatars = [
+  { id: 'group-1', path: '/group-avatars/grpimg.png' },
+  { id: 'group-2', path: '/group-avatars/grpimg2.png'},
+  { id: 'group-3', path: '/group-avatars/grpimg3.png' }
+]
 
 function GroupPage() {
     const { groupId } = useParams()
@@ -11,8 +22,9 @@ function GroupPage() {
     const [groups, setGroups] = useState([])
     const [isEditing, setIsEditing] = useState(false)
     const [editedGroupName, setEditedGroupName] = useState('')
-    const [editedGroupImage, setEditedGroupImage] = useState('')
+    const [editedGroupAvatar, setEditedGroupAvatar] = useState('')
     const [error, setError] = useState('')
+    const [groupMovies, setGroupMovies] = useState([])
     const group = groups.find((item) => String(item.id) === groupId)
     const isMember = Boolean(group)
     const currentUser = JSON.parse(localStorage.getItem('user') || 'null')
@@ -27,6 +39,12 @@ function GroupPage() {
     useEffect(() => {
         getGroupMembers(groupId)
             .then(setMembers)
+            .catch((err) => setError(err.message))
+    }, [groupId])
+
+    useEffect(() => {
+        getGroupMovies(groupId)
+            .then(setGroupMovies)
             .catch((err) => setError(err.message))
     }, [groupId])
 
@@ -45,6 +63,7 @@ function GroupPage() {
 
     const handleEditGroup = () => {
         setEditedGroupName(group?.name ?? '')
+        setEditedGroupAvatar(group?.avatar || groupAvatars[0].path)
         setIsEditing(true)
     }
 
@@ -52,7 +71,7 @@ function GroupPage() {
         event.preventDefault()
         setError('')
         try {
-          const updatedGroup = await updateGroup(groupId, editedGroupName)
+          const updatedGroup = await updateGroup(groupId, editedGroupName, editedGroupAvatar)
           setGroups((currentGroups) => currentGroups.map((item) => (
             String(item.id) === groupId ? { ...item, ...updatedGroup } : item
           )))
@@ -76,10 +95,11 @@ function GroupPage() {
       <main>
         <Link to={"/groups"}>Takaisin ryhmät sivulle</Link>
         <div className='groupInfo'>
+          <img
+            src={group?.avatar || groupAvatars[0].path}
+            alt=""
+          />
           <h2>
-            <img
-              src='/group-avatars/grpimg.png'
-            />
             {isEditing ? (
               <form onSubmit={handleSaveGroup}>
                 <input
@@ -90,6 +110,20 @@ function GroupPage() {
                 <button type='submit' className="saveButton">Tallenna</button>
                 <button type='button' className="cancelButton"
                 onClick={() => setIsEditing(false)}>Peruuta</button>
+                <div className='group-avatar-options'>
+                  {groupAvatars.map((avatar) => (
+                    <button
+                      key={avatar.id}
+                      type='button'
+                      className={editedGroupAvatar === avatar.path ? 'selected' : ''}
+                      onClick={() => setEditedGroupAvatar(avatar.path)}
+                      aria-label={`Valitse ryhmäkuva ${avatar.id}`}
+                      aria-pressed={editedGroupAvatar === avatar.path}
+                    >
+                      <img src={avatar.path} alt="" />
+                    </button>
+                  ))}
+                </div>
               </form>
             ) : group?.name}
           </h2>
@@ -111,6 +145,10 @@ function GroupPage() {
             )}
           </div>
         </div>
+        <section className='groupMovies'>
+          <h2>Ryhmän suosikit</h2>
+          <MovieList movies={groupMovies} />
+        </section>
         <div className='managing'>
           {isCreator && (
             <>
