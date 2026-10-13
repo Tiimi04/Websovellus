@@ -39,6 +39,13 @@ const getGroupMembers = async (groupId) => {
     return parseResponse(response)
 }
 
+const getGroupMovies = async (groupId) => {
+    const response = await fetch(`${API_URL}/api/groups/${groupId}/movies`, {
+        headers: authHeaders()
+    })
+    return parseResponse(response)
+}
+
 const deleteGroup = async (groupId) => {
     const response = await fetch(`${API_URL}/api/groups/${groupId}`, {
         method: 'DELETE',
@@ -47,11 +54,11 @@ const deleteGroup = async (groupId) => {
     return parseResponse(response)
 }
 
-const updateGroup = async (groupId, name) => {
+const updateGroup = async (groupId, name, avatar) => {
     const response = await fetch(`${API_URL}/api/groups/${groupId}`, {
         method: 'PUT',
         headers: authHeaders(),
-        body: JSON.stringify({ name })
+        body: JSON.stringify({ name, avatar })
     })
     return parseResponse(response)
 }
@@ -83,8 +90,9 @@ export { getGroups,
         getDiscoverGroups,
         getGroupMembers,
         leaveGroup,
+        getGroupMovies,
         createGroup,
         deleteGroup,
         updateGroup,
-        joinGroup 
+        joinGroup,
     }
