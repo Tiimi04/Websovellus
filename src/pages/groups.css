@@ -25,6 +25,10 @@
     padding: 0;
 }
 
+.nameInput button {
+    margin: 0 0 0 1rem;
+}
+
 .listItem {
     background-color: rgba(169, 169, 169, 0.232);
     margin: 1rem;
@@ -97,7 +101,7 @@ ul {
 .groupMap #group-profile {
     width: 5em;
     height: 5em;
-    padding: 0 5px 0 0;
+    padding: 0;
     border-radius: 10%;
 }
 
