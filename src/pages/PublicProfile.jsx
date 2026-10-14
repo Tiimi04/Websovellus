@@ -10,7 +10,7 @@ function PublicProfile() {
     const navigate = useNavigate()
     const location = useLocation()
 
-    // kun klikataan hakutuloksesta search barista käyttääjää on data otettu jo mukaan
+    
     const [user, setUser] = useState(location.state?.user ?? null)
     const [error, setError] = useState('')
     const [favourites, setFavourites] = useState([])
