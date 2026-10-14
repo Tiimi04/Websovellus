@@ -18,20 +18,6 @@
     height: 2rem;
 }
 
-.deleteBtn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 3rem;
-    height: 2rem;
-    padding: 0;
-}
-.deleteBtn img {
-    display: block;
-    width: 2rem;
-    height: 2rem;
-}
-
 .topBar .nameInput {
     position: relative;
     font-size: 16px;
@@ -39,6 +25,12 @@
     padding: 0;
 }
 
+.listItem {
+    background-color: rgba(169, 169, 169, 0.232);
+    margin: 1rem;
+    padding: 1rem;
+    border-radius: 10px;
+}
 ul {
     width: auto;
     position: relative;
@@ -57,15 +49,30 @@ ul {
     float: none;
 }
 
+.membersPanel > ul {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+}
+
+.membersPanel > ul > li {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    padding: 0 0 0 1em;
+}
+
 .membersBtn {
     position: relative;
     font-size: 14px;
-    margin: 0;
-    padding: 2px 5px 2px 5px;
+    color: white;
+    background-color: #1a1a1a;
 }
+
 .membersPanel {
-    padding: 0px;
-    margin: 0px;
+    padding: 1px 0 2px 0;
+    margin: 0;
+    border-radius: 10px
 }
 
 .memberAvatar {
@@ -82,7 +89,25 @@ ul {
     margin: 5px;
 }
 
-.membersInfo {
-    padding: 0px 1em 0px 1em;
-    margin: 0px;
+.memberInfo {
+    padding: 0 0 0 0;
+    flex: 0.8;
+    text-align: center;
+}
+
+.groupMap #group-profile {
+    width: 5em;
+    height: 5em;
+    padding: 0 5px 0 0;
+}
+
+.groupMap .group-link a:link,
+.groupMap .group-link a:visited {
+    color: inherit;
+    font-weight: bold;
+}
+
+.groupMap .group-link a:hover,
+.groupMap .group-link a:active {
+    color: #1a1a1a;
 }
