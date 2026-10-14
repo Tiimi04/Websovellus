@@ -83,6 +83,10 @@ CREATE TABLE join_requests (
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE UNIQUE INDEX request_pending_per_user
+ON join_requests (group_id, user_id)
+WHERE status='pending';
+
 CREATE TABLE reviews (
   id SERIAL PRIMARY KEY,
   user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
