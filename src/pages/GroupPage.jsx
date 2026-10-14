@@ -203,11 +203,14 @@ function GroupPage() {
               <button type='button' onClick={() => handleJoin(group.id)}>Liity</button>
             )}
           </div>
-        
+          {isMember ? (
         <section className='groupMovies'>
           <h2>Ryhmän suosikit</h2>
           <MovieList movies={groupMovies} />
-        </section>
+        </section>) : (
+          <span>Liity ryhmään nähdäksesi ryhmän suosikkielokuvat</span>
+        )
+            }        
 		</main>
 	)
 }
