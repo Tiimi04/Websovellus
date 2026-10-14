@@ -6,6 +6,7 @@ import { getGroups,
         deleteGroup,
         updateGroup,
         leaveGroup,
+        joinGroup,
         getGroupMovies } from '../services/groupService'
 import MovieList from '../components/MovieList'
 import './GroupPage.css'
@@ -91,6 +92,24 @@ function GroupPage() {
         }
     }
 
+    const handleJoin = async (groupId) => {
+        setError('')
+        try {
+            await joinGroup(groupId)
+            setGroups((currentGroups) => (
+              currentGroups.some((item) => String(item.id) === String(groupId))
+                ? currentGroups
+                : [group, ...currentGroups]
+            ))
+            setDiscoverGroups((currentGroups) => (
+              currentGroups.filter((item) => String(item.id) !== String(groupId))
+            ))
+            setMembers(await getGroupMembers(groupId))
+        } catch (err) {
+          setError(err.message)
+        }
+    }
+
     const handleLeaveGroup = async () => {
         setError('')
         try {
@@ -158,21 +177,30 @@ function GroupPage() {
             <ul>
               {members.map((member) => (
                 <li key={member.id}>
-                  {member.profile_image && (
+                  {member.profile_image ? (
                     <img src={member.profile_image}
                     id='user-avatar'
-                    />
+                    /> ) : (
+                      <span className='initial'>
+                        {member.username?.charAt(0).toUpperCase()}
+                      </span>
                   )}
                   <span className='username'>
                   <Link to={`/users/${member.id}`}>{member.username}</Link>
                   </span>
+                  <span className='joinDate'>
+                    {member.joined_at && (
+                      <small>Liittynyt {new Date(member.joined_at).toLocaleDateString()}</small>
+                    )}
+                  </span>
                 </li>
               ))}
             </ul>
-            {isMember && (
+            {isMember ? (
               <button type='button' onClick={handleLeaveGroup}>
                 Poistu ryhmästä
-              </button>
+              </button> ) : (
+              <button type='button' onClick={() => handleJoin(group.id)}>Liity</button>
             )}
           </div>
         
