@@ -46,17 +46,6 @@ function Groups() {
         }
     }
 
-    const handleDelete = async (groupId) => {
-        setError('')
-        try {
-            await deleteGroup(groupId)
-            setGroups((currentGroups) => (
-            currentGroups.filter((group) => group.id !== groupId)
-        ))
-        } catch (err) {
-            setError(err.message)
-        }
-      }
 
     const handleFetch = async (groupId) => {
         setError('')
@@ -123,9 +112,15 @@ function Groups() {
           <ul>
             {groups.map((group) => (
               <li key={group.id}>
-                <strong><Link to={`/groups/${group.id}`}>{group.name}</Link></strong>
                 <div className="listItem">
                 <ul>
+                  <li><Link to={`/groups/${group.id}`}>
+                    <img src={group.avatar || '/group-avatars/default-grpimg.png' }
+                      id='group-profile'></img>
+                  </Link></li>
+                  <div className='group-link'><li>
+                    <strong><Link to={`/groups/${group.id}`}>{(group.name).toUpperCase()}</Link></strong>
+                  </li></div>
                   <li> Luotu {new Date(group.created).toLocaleDateString()}</li>
                   <li> Luoja {group.owner_username}</li>
                   {activeView === 'discover' ? (
@@ -137,10 +132,6 @@ function Groups() {
                     ) : (
                   <>
                   <li>
-                    <button className="deleteBtn" type="button"
-                    onClick={() => handleDelete(group.id)}>
-                    <img src="/burger-menu/deleteicon.png"/>
-                    </button>
                   </li>
                   <li>
                     <button className="membersBtn" type="button"
@@ -170,9 +161,9 @@ function Groups() {
                             )}
                             <span className="memberInfo">
                               <strong> {member.username} </strong>
-                              {member.joined_at && (
+                              {/*{member.joined_at && (
                                 <small>Liittynyt {new Date(member.joined_at).toLocaleDateString()}</small>
-                              )}
+                              )} */}
                             </span>
                           </li>
                         ))}
