@@ -16,12 +16,14 @@ a:hover, a:active {
     padding: 0 1rem 0 1rem;
     border-radius: 5px;
     border: solid;
+    border-width: 1px;
     background-color: #1a1a1a;
 }
 
 .groupInfo img {
     height: 2em;
     width: 2em;
+    border-radius: 10%;
 }
 
 #group-avatar {
@@ -30,6 +32,7 @@ a:hover, a:active {
     right: 10%;
     width: 15rem;
     height: 15rem;
+    border-radius: 10%;
 }
 
 .userMap {
@@ -55,7 +58,7 @@ a:hover, a:active {
 }
 
 .username {
-    padding: 0 0 0 0;
+    padding: 0 1rem 0 1rem;
     flex: 0.8;
     text-align: center;
 }
@@ -64,6 +67,12 @@ a:hover, a:active {
     width: 3em;
     height: 3em;
     border-radius: 50%;
+}
+
+.initial {
+    font-size: 32px;
+    padding: 5px;
+    margin: 5px;
 }
 
 .managing {
