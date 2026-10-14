@@ -182,11 +182,6 @@ function Profile() {
                 {!isListPublic && <p>Aseta lista julkiseksi ennen jakolinkin kopiointia.</p>}
                 {shareMessage && <p role="status">{shareMessage}</p>}
                 {shareError && <p role="alert" style={{ color: 'red' }}>{shareError}</p>}
-                {user.id && (
-                    <button type="button" onClick={() => navigate(`/users/${user.id}`)}>
-                        Näytä julkinen profiili
-                    </button>
-                )}
                 {favouritesError && <p style={{ color: 'red' }}>{favouritesError}</p>}
                 {favourites.length === 0 ? (
                     <p>Et ole vielä lisännyt yhtään elokuvaa suosikkeihin.</p>
