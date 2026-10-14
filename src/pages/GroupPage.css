@@ -35,6 +35,12 @@ a:hover, a:active {
     border-radius: 10%;
 }
 
+.requests {
+    position: relative;
+    width: fit-content;
+    text-align: left;
+}
+
 .userMap {
     width: fit-content; 
     display: list-item;
@@ -154,4 +160,16 @@ a:hover, a:active {
 
 .groupMovies > div > div {
     flex: 0 0 220px;
+}
+
+.requests {
+    padding: 0;
+    margin: 0;
+}
+
+.requests img {
+    height: 1rem;
+    width: 1rem;
+    padding: 0;
+    margin: 0;
 }
