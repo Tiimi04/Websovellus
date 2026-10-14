@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Link } from 'react-router-dom'
 import { getGroups,
         createGroup,
-        deleteGroup,
         getGroupMembers,
         joinGroup,
         getDiscoverGroups
@@ -161,9 +160,6 @@ function Groups() {
                             )}
                             <span className="memberInfo">
                               <strong> {member.username} </strong>
-                              {/*{member.joined_at && (
-                                <small>Liittynyt {new Date(member.joined_at).toLocaleDateString()}</small>
-                              )} */}
                             </span>
                           </li>
                         ))}
