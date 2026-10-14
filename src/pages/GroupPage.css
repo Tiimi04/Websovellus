@@ -39,6 +39,8 @@ a:hover, a:active {
     width: fit-content; 
     display: list-item;
     list-style: none;
+    text-align: left;
+    justify-content: center;
     border-radius: 10px;
     padding: 1rem 1rem 0 0;
     margin: 0;
@@ -57,16 +59,19 @@ a:hover, a:active {
     padding: 0 0 0 1em;
 }
 
-.username {
-    padding: 0 1rem 0 1rem;
-    flex: 0.8;
-    text-align: center;
-}
-
 .userMap img {
     width: 3em;
     height: 3em;
     border-radius: 50%;
+}
+
+.userMap button {
+    margin: 1rem;
+}
+.username {
+    padding: 0 1rem 0 1rem;
+    flex: 0.8;
+    text-align: center;
 }
 
 .initial {
