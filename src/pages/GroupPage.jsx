@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { getGroups,
+        getDiscoverGroups,
         getGroupMembers,
         deleteGroup,
         updateGroup,
@@ -20,19 +21,25 @@ function GroupPage() {
     const navigate = useNavigate()
     const [members, setMembers] = useState([])
     const [groups, setGroups] = useState([])
+    const [discoverGroups, setDiscoverGroups] = useState([])
     const [isEditing, setIsEditing] = useState(false)
     const [editedGroupName, setEditedGroupName] = useState('')
     const [editedGroupAvatar, setEditedGroupAvatar] = useState('')
     const [error, setError] = useState('')
     const [groupMovies, setGroupMovies] = useState([])
-    const group = groups.find((item) => String(item.id) === groupId)
-    const isMember = Boolean(group)
+    const memberGroup = groups.find((item) => String(item.id) === groupId)
+    const group = memberGroup ?? discoverGroups.find((item) => String(item.id) === groupId)
+    const isMember = Boolean(memberGroup)
     const currentUser = JSON.parse(localStorage.getItem('user') || 'null')
     const isCreator = group && String(group.owner_id) === String(currentUser?.id)
 
     useEffect(() => {
         getGroups()
             .then(setGroups)
+            .catch((err) => setError(err.message))
+
+        getDiscoverGroups()
+            .then(setDiscoverGroups)
             .catch((err) => setError(err.message))
     }, [])
 
@@ -75,6 +82,9 @@ function GroupPage() {
           setGroups((currentGroups) => currentGroups.map((item) => (
             String(item.id) === groupId ? { ...item, ...updatedGroup } : item
           )))
+          setDiscoverGroups((currentGroups) => currentGroups.map((item) => (
+            String(item.id) === groupId ? { ...item, ...updatedGroup } : item
+          )))
           setIsEditing(false)
         } catch (err) {
           setError(err.message)
@@ -95,10 +105,6 @@ function GroupPage() {
       <main>
         <Link to={"/groups"}>Takaisin ryhmät sivulle</Link>
         <div className='groupInfo'>
-          <img
-            src={group?.avatar || groupAvatars[0].path}
-            alt=""
-          />
           <h2>
             {isEditing ? (
               <form onSubmit={handleSaveGroup}>
@@ -113,42 +119,20 @@ function GroupPage() {
                 <div className='group-avatar-options'>
                   {groupAvatars.map((avatar) => (
                     <button
-                      key={avatar.id}
-                      type='button'
-                      className={editedGroupAvatar === avatar.path ? 'selected' : ''}
-                      onClick={() => setEditedGroupAvatar(avatar.path)}
-                      aria-label={`Valitse ryhmäkuva ${avatar.id}`}
-                      aria-pressed={editedGroupAvatar === avatar.path}
+                    key={avatar.id}
+                    type='button'
+                    className={editedGroupAvatar === avatar.path ? 'selected' : ''}
+                    onClick={() => setEditedGroupAvatar(avatar.path)}
+                    aria-label={`Valitse ryhmäkuva ${avatar.id}`}
+                    aria-pressed={editedGroupAvatar === avatar.path}
                     >
                       <img src={avatar.path} alt="" />
                     </button>
                   ))}
                 </div>
               </form>
-            ) : group?.name}
+            ) : group?.name.toUpperCase()}
           </h2>
-          <div classname='userMap'>
-            <ul>
-              {members.map((member) => (
-                <li key={member.id}>
-                  {member.profile_image && (
-                    <img src={member.profile_image}/>
-                  )}
-                  <Link to={`/users/${member.id}`}>{member.username}</Link>
-                </li>
-              ))}
-            </ul>
-            {isMember && (
-              <button type='button' onClick={handleLeaveGroup}>
-                Poistu ryhmästä
-              </button>
-            )}
-          </div>
-        </div>
-        <section className='groupMovies'>
-          <h2>Ryhmän suosikit</h2>
-          <MovieList movies={groupMovies} />
-        </section>
         <div className='managing'>
           {isCreator && (
             <>
@@ -163,7 +147,39 @@ function GroupPage() {
               )}
             </>
           )}
+          </div>
         </div>
+          <img
+            src={group?.avatar || '/group-avatars/default-grpimg.png'}
+            id='group-avatar'
+          />
+          <div className='userMap'>
+            <h3>Jäsenet</h3>
+            <ul>
+              {members.map((member) => (
+                <li key={member.id}>
+                  {member.profile_image && (
+                    <img src={member.profile_image}
+                    id='user-avatar'
+                    />
+                  )}
+                  <span className='username'>
+                  <Link to={`/users/${member.id}`}>{member.username}</Link>
+                  </span>
+                </li>
+              ))}
+            </ul>
+            {isMember && (
+              <button type='button' onClick={handleLeaveGroup}>
+                Poistu ryhmästä
+              </button>
+            )}
+          </div>
+        
+        <section className='groupMovies'>
+          <h2>Ryhmän suosikit</h2>
+          <MovieList movies={groupMovies} />
+        </section>
 		</main>
 	)
 }
