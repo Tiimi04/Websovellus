@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { getGroups,
         createGroup,
         getGroupMembers,
-        joinGroup,
+        joinRequest,
         getDiscoverGroups
        } from '../services/groupService'
 import './groups.css'
@@ -120,26 +120,14 @@ function Groups() {
                   <div className='group-link'><li>
                     <strong><Link to={`/groups/${group.id}`}>{(group.name).toUpperCase()}</Link></strong>
                   </li></div>
-                  <li> Luotu {new Date(group.created).toLocaleDateString()}</li>
-                  <li> Luoja {group.owner_username}</li>
-                  {activeView === 'discover' ? (
-                    <li>
-                      <button type='button' onClick={() => 
-                        handleJoin(group.id)}>Liity
-                      </button>
-                    </li>
-                    ) : (
-                  <>
-                  <li>
-                  </li>
+                  <li> Omistaja: {group.owner_username}</li>
+                  <li> Luotu: {new Date(group.created).toLocaleDateString()}</li>
                   <li>
                     <button className="membersBtn" type="button"
                     onClick={() => handleFetch(group.id)}>
                     Jäsenet
                     </button>
                   </li>
-                  </>
-                    )}
                 </ul>
                 </div>
                 {membersGroupId === group.id && (
