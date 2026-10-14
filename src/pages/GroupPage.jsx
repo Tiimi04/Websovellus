@@ -168,12 +168,22 @@ function GroupPage() {
           )}
           </div>
         </div>
+          {/*<div className='description'>
+            <span>Hyviä elokuvia hyvä ystäviä</span> // ryhmille kuvaus toiminto ei implementoitu
+          </div>*/}
           <img
             src={group?.avatar || '/group-avatars/default-grpimg.png'}
             id='group-avatar'
           />
           <div className='userMap'>
-            <h3>Jäsenet</h3>
+            <h3>Jäsenet
+              {isMember ? (
+                <button type='button' onClick={handleLeaveGroup}>
+                  Poistu ryhmästä
+                </button> ) : (
+                <button type='button' onClick={() => handleJoin(group.id)}>Liity</button>
+              )}
+            </h3>
             <ul>
               {members.map((member) => (
                 <li key={member.id}>
@@ -196,12 +206,6 @@ function GroupPage() {
                 </li>
               ))}
             </ul>
-            {isMember ? (
-              <button type='button' onClick={handleLeaveGroup}>
-                Poistu ryhmästä
-              </button> ) : (
-              <button type='button' onClick={() => handleJoin(group.id)}>Liity</button>
-            )}
           </div>
           {isMember ? (
         <section className='groupMovies'>
