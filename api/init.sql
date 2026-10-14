@@ -33,7 +33,7 @@ CREATE TABLE users (
 CREATE TABLE groups (
   id SERIAL PRIMARY KEY,
   name VARCHAR(250) NOT NULL,
-  owner_id INT NOT NULL REFERENCES users(id),
+  owner_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   avatar VARCHAR(255) NULL
 );
@@ -68,7 +68,7 @@ CREATE TABLE group_members (
 CREATE TABLE group_movies (
   group_id INT NOT NULL REFERENCES groups(id) ON DELETE CASCADE,
   movie_id INT NOT NULL REFERENCES movies(id) ON DELETE CASCADE,
-  added_by INT NULL REFERENCES users(id),
+  added_by INT NULL REFERENCES users(id) ON DELETE SET NULL,
   added_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (group_id, movie_id)
 );
@@ -85,7 +85,7 @@ CREATE TABLE join_requests (
 
 CREATE TABLE reviews (
   id SERIAL PRIMARY KEY,
-  user_id INT NOT NULL REFERENCES users(id),
+  user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   movie_id INT NOT NULL REFERENCES movies(id),
   rating SMALLINT NOT NULL,
   review_text VARCHAR(250) NULL,
