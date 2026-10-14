@@ -51,3 +51,39 @@ describe('Lisää suosikkeihin ilman tokenia', function () {
         expect(response.status).to.equal(401)
     })
 })
+
+describe('Reviews API', function () {
+  it('palauttaa vähintään yhden arvostelun', async function () {
+    const response = await fetch(
+      'http://localhost:3000/api/movies/550/reviews'
+    )
+
+    expect(response.status).to.equal(200)
+
+    const reviews = await response.json()
+    expect(reviews).to.be.an('array')
+  })
+})
+
+
+describe('Login API', function () {
+it('kirjautuminen onnistuu oikeilla tunnuksilla', async function () {
+const response = await fetch('http://localhost:3000/api/login', {
+    
+    
+method: 'POST',
+headers: {
+'Content-Type': 'application/json'
+},
+
+body: JSON.stringify({
+username: process.env.TEST_USERNAME,
+password: process.env.TEST_PASSWORD
+})
+})
+expect(response.status).to.equal(200)
+
+const data = await response.json()
+expect(data).to.have.property('token')
+})
+})
