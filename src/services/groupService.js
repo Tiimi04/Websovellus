@@ -63,12 +63,36 @@ const updateGroup = async (groupId, name, avatar) => {
     return parseResponse(response)
 }
 
-const joinGroup = async (groupID) => {
+const joinRequest = async (groupID) => {
     const response = await fetch(`${API_URL}/api/groups/${groupID}/join`, {
         method: 'POST',
         headers: authHeaders()
     })
     return parseResponse(response)
+}
+
+const getRequests = async (groupId) => {
+    const response = await fetch(`${API_URL}/api/groups/${groupId}/requests`, {
+        headers: authHeaders()
+    })
+    return parseResponse(response)
+}
+
+const addMember = async (groupId, requestId) => {
+    const response = await fetch(`${API_URL}/api/groups/${groupId}/requests/${requestId}/accept`, {
+        method: 'POST',
+        headers: authHeaders()
+    })
+    return parseResponse(response)
+}
+
+const rejectRequest = async (groupId, requestId) => {
+    const response = await fetch(
+        `${API_URL}/api/groups/${groupId}/requests/${requestId}/reject`, {
+            method: 'PATCH',
+            headers: authHeaders()
+        })
+        return parseResponse(response)
 }
 
 const getDiscoverGroups = async () => {
@@ -94,5 +118,8 @@ export { getGroups,
         createGroup,
         deleteGroup,
         updateGroup,
-        joinGroup,
+        joinRequest,
+        addMember,
+        rejectRequest,
+        getRequests
     }
