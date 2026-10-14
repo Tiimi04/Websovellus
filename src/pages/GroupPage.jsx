@@ -6,8 +6,12 @@ import { getGroups,
         deleteGroup,
         updateGroup,
         leaveGroup,
-        joinGroup,
-        getGroupMovies } from '../services/groupService'
+        joinRequest,
+        addMember,
+        rejectRequest,
+        getRequests,
+        getGroupMovies }
+      from '../services/groupService'
 import MovieList from '../components/MovieList'
 import './GroupPage.css'
 
@@ -28,6 +32,8 @@ function GroupPage() {
     const [editedGroupAvatar, setEditedGroupAvatar] = useState('')
     const [error, setError] = useState('')
     const [groupMovies, setGroupMovies] = useState([])
+    const [requestSent, setRequestSent] = useState(false)
+    const [requests, setRequests] = useState([])
     const memberGroup = groups.find((item) => String(item.id) === groupId)
     const group = memberGroup ?? discoverGroups.find((item) => String(item.id) === groupId)
     const isMember = Boolean(memberGroup)
@@ -54,6 +60,14 @@ function GroupPage() {
         getGroupMovies(groupId)
             .then(setGroupMovies)
             .catch((err) => setError(err.message))
+    }, [groupId])
+
+    useEffect(() => {
+      if (!groupId) return
+
+      getRequests(groupId)
+        .then(setRequests)
+        .catch((err) => setError(err.message))
     }, [groupId])
 
     const handleDeleteGroup = async (groupId) => {
@@ -92,22 +106,41 @@ function GroupPage() {
         }
     }
 
-    const handleJoin = async (groupId) => {
+    const handleRequest = async (groupId) => {
         setError('')
         try {
-            await joinGroup(groupId)
-            setGroups((currentGroups) => (
-              currentGroups.some((item) => String(item.id) === String(groupId))
-                ? currentGroups
-                : [group, ...currentGroups]
-            ))
-            setDiscoverGroups((currentGroups) => (
-              currentGroups.filter((item) => String(item.id) !== String(groupId))
-            ))
+          await joinRequest(groupId)
+          setRequestSent(true)
+        } catch (err) {
+          setError(err.message)
+        }
+    }
+
+    const handleAccept = async (requestId) => {
+        setError('')
+        try {
+            await addMember(groupId, requestId)
+            setRequests((currentRequests) =>
+              currentRequests.filter(
+                (request) => String(request.id) !== String(requestId)
+              )
+            )
             setMembers(await getGroupMembers(groupId))
         } catch (err) {
           setError(err.message)
         }
+    }
+
+    const handleReject = async (requestId) => {
+      setError('')
+      try {
+        await rejectRequest(groupId, requestId)
+        setRequests((currentRequests) => 
+          currentRequests.filter(
+            (request) => String(request.id) !== String(requestId))
+      )} catch (err) {
+        setError(err.message)
+      }
     }
 
     const handleLeaveGroup = async () => {
@@ -156,7 +189,7 @@ function GroupPage() {
           {isCreator && (
             <>
               <button onClick={() => handleDeleteGroup(groupId)} id='deleteBut'>
-              <img src='/public/burger-menu/deleteicon.png'></img>
+              <img src='/burger-menu/deleteicon.png'></img>
               </button>
           
               {!isEditing && (
@@ -168,6 +201,25 @@ function GroupPage() {
           )}
           </div>
         </div>
+        <div className='requests'>
+          {isCreator && (
+            <>
+            <h3>Liittymispyynnöt: </h3>
+            <ul>
+              {requests.map((request) => (
+              <li key={request.id}>{request.username}
+                <button type='button' onClick={() =>handleReject(request.id)}>
+                  <img src='/burger-menu/rejecticon.png'></img>
+                </button>
+                <button type='button' onClick={() => handleAccept(request.id)}>
+                  <img src='/burger-menu/accepticon.png'></img>
+                </button>
+              </li>
+              ))}
+            </ul>
+            </>
+          )}
+        </div>
           {/*<div className='description'>
             <span>Hyviä elokuvia hyvä ystäviä</span> // ryhmille kuvaus toiminto ei implementoitu
           </div>*/}
@@ -177,11 +229,20 @@ function GroupPage() {
           />
           <div className='userMap'>
             <h3>Jäsenet
-              {isMember ? (
-                <button type='button' onClick={handleLeaveGroup}>
-                  Poistu ryhmästä
-                </button> ) : (
-                <button type='button' onClick={() => handleJoin(group.id)}>Liity</button>
+              {!isCreator && (
+                isMember ? (
+                  <button type='button' onClick={handleLeaveGroup}>
+                    Poistu ryhmästä
+                  </button> 
+                ) : requestSent? (
+                 <button type='button' disabled>
+                   Pyyntö lähetetty
+                 </button>
+                ) : (
+                  <button type='button' onClick={() => handleRequest(group.id)}>
+                    Liittymispyyntö
+                  </button>
+                )
               )}
             </h3>
             <ul>
