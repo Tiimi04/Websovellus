@@ -1,28 +1,97 @@
+a:link, a:visited {
+    color: inherit;
+    font-weight: bold;
+}
+
+a:hover, a:active {
+    color: #a9a9a9ae;
+}
+
 .groupInfo {
-    text-align: left;
+    width: fit-content;
+    text-align: center;
+    font-size: 32px;
+    justify-content: center;
+    margin: 0;
+    padding: 0 1rem 0 1rem;
+    border-radius: 5px;
+    border: solid;
+    background-color: #1a1a1a;
 }
 
 .groupInfo img {
-    width: 2em;
     height: 2em;
+    width: 2em;
 }
 
-.managing {
+#group-avatar {
     position: absolute;
     top: 10%;
     right: 10%;
+    width: 15rem;
+    height: 15rem;
+}
+
+.userMap {
+    width: fit-content; 
+    display: list-item;
+    list-style: none;
+    border-radius: 10px;
+    padding: 1rem 1rem 0 0;
+    margin: 0;
+}
+
+.userMap > ul {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+}
+
+.userMap > ul > li {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    padding: 0 0 0 1em;
+}
+
+.username {
+    padding: 0 0 0 0;
+    flex: 0.8;
+    text-align: center;
+}
+
+.userMap img {
+    width: 3em;
+    height: 3em;
+    border-radius: 50%;
+}
+
+.managing {
+    align-items: center;
+    justify-content: center;
+}
+
+.managing #editBut {
+    margin: 0;
+    padding: 0 1rem 0 1rem;
+}
+
+.managing #deleteBut {
+    margin: 0;
+    padding: 0 1rem 0 1rem;
 }
 .managing #deleteBut img {
-    width: 2em;
-    height: 2em;
+    width: 2rem;
+    height: 2rem;
 }
 
 .managing #editBut img {
-    width: 2em;
-    height: 2em;
+    width: 2rem;
+    height: 2rem;
 }
 
 .saveButton {
+    font-size: 16px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -32,6 +101,7 @@
 }
 
 .cancelButton {
+    font-size: 16px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -45,16 +115,29 @@
 }
 
 .group-avatar-options button {
+    margin: 0;
+    padding: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
 .group-avatar-options button.selected {
-    outline: 2px solid currentColor;
+    outline: 1px solid currentColor;
 }
 
 .group-avatar-options img {
-    width: 4em;
-    height: 4em;
+    width: 2em;
+    height: 2em;
+}
+
+.groupMovies > div {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    padding: 0.5rem 0;
+}
+
+.groupMovies > div > div {
+    flex: 0 0 220px;
 }
