@@ -71,16 +71,99 @@ const getDiscoverGroups = async (req, res, next) => {
     }
 }
 
-const joinGroup = async (req, res, next) => {
+const joinRequest = async (req, res, next) => {
     try {
         const result = await pool.query(
-            `INSERT INTO group_members (group_id, user_id)
-            VALUES ($1, $2) RETURNING group_id, user_id`,
+            `INSERT INTO join_requests (group_id, user_id)
+            VALUES ($1, $2)
+            ON CONFLICT(group_id, user_id) WHERE status = 'pending' DO NOTHING
+            RETURNING group_id, user_id, status`,
             [req.params.groupId, req.user.id]
         )
 
+        if (!result.rows[0]) {
+            const error = new Error ('Olet jo lähettänyt liittymispyynnön')
+            error.status = 409
+            throw error
+        }
+
         res.status(201).json(result.rows[0])
     } catch (error) {
+        next(error)
+    }
+}
+
+const getRequests = async (req, res, next) => {
+    try {
+        const result = await pool.query(
+            `SELECT jr.id, jr.group_id, jr.user_id, u.username, jr.created_at
+            FROM join_requests jr
+            JOIN users u on u.id = jr.user_id
+            WHERE jr.group_id = $1
+            AND jr.status = 'pending'
+            ORDER BY jr.created_at`,
+            [req.params.groupId]
+        )
+        
+        res.json(result.rows)
+    } catch (error) {
+        next (error)
+    }
+}
+
+const addMember = async (req, res, next) => {
+    try {
+        const { groupId, requestId } = req.params
+
+        const result = await pool.query(
+            `WITH accepted_request AS (
+                UPDATE join_requests
+                SET status = 'accepted'
+                WHERE id = $1
+                AND group_id = $2
+                AND status = 'pending'
+                RETURNING id, group_id, user_id, status
+            ),
+            added_member AS (
+                INSERT INTO group_members (group_id, user_id)
+                SELECT group_id, user_id
+                FROM accepted_request
+                ON CONFLICT (group_id, user_id) DO NOTHING
+                RETURNING group_id, user_id
+            )
+            SELECT id, group_id, user_id, status
+            FROM accepted_request`,
+            [requestId, groupId]
+        )
+
+        if (!result.rows[0]) {
+            const error = new Error('Pending request not found')
+            error.status = 404
+            throw error
+        }
+
+        res.json(result.rows[0])
+    }  catch (error) {
+        next (error)
+    }
+}
+
+const rejectRequest = async (req, res, next) => {
+    try {
+        const { groupId, requestId } = req.params
+
+        const result = await pool.query(
+            `UPDATE join_requests jr SET status = 'rejected'
+            FROM groups g WHERE jr.id = $1
+                AND jr.group_id = $2
+                AND g.id = jr.group_id
+                AND g.owner_id = $3
+                AND jr.status = 'pending'
+            RETURNING jr.id, jr.group_id, jr.user_id, jr.status`,
+            [requestId, groupId, req.user.id]
+        )
+        res.json(result.rows[0])
+    }   catch (error) {
         next(error)
     }
 }
@@ -212,7 +295,10 @@ export { getGroups,
     deleteGroup,
     updateGroup,
     getDiscoverGroups,
-    joinGroup,
+    joinRequest,
     leaveGroup,
     getGroupMovies,
+    addMember,
+    rejectRequest,
+    getRequests
 }
